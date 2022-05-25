@@ -3,6 +3,7 @@
 * The kickstart files aim to provide a minimal installation.
 * The `*-cis*.cfg` can be used to create VMs that follow the [CIS standards](https://www.cisecurity.org/) for partitioning. These VMs can later be hardened, for example using [linuxfabrik.lfops.stig](https://github.com/Linuxfabrik/lfops/tree/main/roles/stig) role.
 * The `*-cloud*.cfg` files are intended for creating base templates for the use with cloud providers (such as OpenStack).
+* These files can be used by booting using corresponding ISO file, then pressing ESC on the first screen, and setting `boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/$FILENAME`.
 
 
 ## Known Limitations
