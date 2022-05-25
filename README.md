@@ -1,33 +1,3 @@
-
-
-Kickstart files contain answers to all questions normally asked by the installation program, such as what time zone you want the system to use, how the drives should be partitioned, or which packages should be installed. Providing a prepared Kickstart file when the installation begins therefore allows you to perform the installation automatically, without need for any intervention from the user. This is especially useful when deploying Red Hat Enterprise Linux on a large number of systems at once.
-Kickstart files can be kept on a single server system and read by individual computers during the installation. This installation method can support the use of a single Kickstart file to install Red Hat Enterprise Linux on multiple machines, making it ideal for network and system administrators.
-
-
-The Red Hat Kickstart installation method is used by Fedora, Red Hat Enterprise Linux and related Linux distributions to automatically perform unattended operating system installation and configuration. Red Hat publishes Cobbler as a tool to automate the Kickstart configuration process.
-Contents
-
-    1 Usage
-    2 Structure
-    3 Example
-    4 External links
-    5 See also
-    6 References
-
-Usage
-
-Kickstart is normally used at sites with many such Linux systems, to allow easy installation[1] and consistent configuration of new computer systems.
-
-Kickstart configuration files can be built three ways:
-
-    By hand.
-    By using the GUI system-config-kickstart tool.
-    By using the standard Red Hat installation program Anaconda.
-
-Anaconda will produce an anaconda-ks.cfg configuration file at the end of any manual installation. This file can be used to automatically reproduce the same installation or edited (manually or with system-config-kickstart). 
-
-
-
 # Collection of Kickstart Files
 
 ## What are Kickstart Installations?
