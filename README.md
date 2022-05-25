@@ -2,12 +2,12 @@
 
 * The kickstart files aim to provide a minimal installation.
 * The `*-cis*.cfg` can be used to create VMs that follow the [CIS standards](https://www.cisecurity.org/) for partitioning. These VMs can later be hardened, for example using [linuxfabrik.lfops.stig](https://github.com/Linuxfabrik/lfops/tree/main/roles/stig) role.
-* The `*-cloud*.cfg` files are intended for creating base templates for the use with cloud providers (such as Openstack).
+* The `*-cloud*.cfg` files are intended for creating base templates for the use with cloud providers (such as OpenStack).
 
 
 ## Known Limitations
 
-* Currently, all kickstart files are designed for the installation of virtual machines, and therefore assume the primary disk to be `vda`.
+* Currently, all kickstart files are designed for the installation of virtual machines using VirtIO, and therefore assume the primary disk to be `vda`.
 
 
 ## Kickstart Syntax References
