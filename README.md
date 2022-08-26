@@ -18,6 +18,9 @@ Kickstart files can be kept on a single server system and read by individual com
 
 These Kickstart files can be used by booting using an ISO file, then pressing ESC on the first screen and using `boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/$FILENAME`.
 
+If you need to configure a static IP address to be used while installation, you can do so by pressing TAB on the first screen and add the following to the existing line `inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/$FILENAME ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER`
+
+(The ip address field is an array, so brackets are mendatory. You could use multiple ip addresses here).
 
 ## Known Limitations
 
