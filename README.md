@@ -20,7 +20,7 @@ These Kickstart files can be used by booting using an ISO file, then pressing ES
 
 If you need to configure a static IP address to be used while installation, you can do so by pressing TAB on the first screen and add the following to the existing line `inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/$FILENAME ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER`
 
-(The ip address field is an array, so brackets are mendatory. You could use multiple ip addresses here).
+Note that the ip address field is an array, so the brackets are mandatory, and you could list multiple ip addresses there.
 
 ## Known Limitations
 
