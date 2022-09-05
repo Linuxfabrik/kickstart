@@ -1,5 +1,10 @@
 # Collection of Kickstart Files
 
+## Kickstart Generator, Kickstart Maker
+
+https://access.redhat.com/labs/kickstartconfig
+
+
 ## What are Kickstart Installations?
 
 Kickstart files contain answers to all questions normally asked by the installation program, such as what time zone you want the system to use, how the drives should be partitioned, or which packages should be installed. Providing a prepared Kickstart file when the installation begins therefore allows you to perform the installation automatically, without need for any intervention from the user. This is especially useful when deploying Red Hat Enterprise Linux (RHEL) on a large number of systems at once.
