@@ -56,12 +56,12 @@ The kickstart works by generating an additional kickstart (`/tmp/dynamic.ks`) in
 
 ### Additional usefull kernel cmdline arguments
 
-* RHEL: inst.loglevel=[debug|info]
-* RHEL: inst.ks=[hd:<device>:<path>|[http,https,ftp]://<host>/<path>|nfs:[<options>:]<server>:/<path> (MANDATORY)
-* RHEL: inst.noverifyssl
-* RHEL: inst.nosave=[<option1>,]<option2> (options: input_ks,output_ks,all_ks,logs,all)
-* RHEL: inst.rescue
-* LF: lfdisk=sda: use only sda for installation. (defaults to vda when unset.)
+* RHEL: `inst.loglevel=[debug|info]`
+* RHEL: `inst.ks=[hd:<device>:<path>|[http,https,ftp]://<host>/<path>|nfs:[<options>:]<server>:/<path>` (MANDATORY)
+* RHEL: `inst.noverifyssl`
+* RHEL: `inst.nosave=[<option1>,]<option2>` (options: `input_ks,output_ks,all_ks,logs,all``)
+* RHEL: `inst.rescue`
+* LF: `lfdisk=<disk>`: use only sda for installation. (defaults to `vda` when unset.)
 
 ## Known Limitations
 
