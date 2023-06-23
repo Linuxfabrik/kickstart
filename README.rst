@@ -27,10 +27,10 @@ The kickstart file can be used to install different types of minimal installs by
     :header-rows: 1
 
     ``lftype=``, Install Type, Partitioning Scheme, User ``linuxfabrik``, User ``root``
-    ``cis``, Minimal, CIS-recommended,          "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: none, Locked: yes"
-    ``cloud``, Minimal, One partition,          "Group: ``wheel``, Password: unset, SSH Keys: none, Locked: yes",               "Password: unset, SSH Keys: none, Locked: yes"
-    ``cloud-cis``, Minimal, CIS-recommended,    "Group: ``wheel``, Password: unset, SSH Keys: none, Locked: yes",               "Password: unset, SSH Keys: none, Locked: yes"
-    ``minimal`` (default if ommitted), Minimal, One partition,        "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: Linuxfabrik, Locked: yes"
+    ``cis``, Minimal, "CIS-recommended, LVM",          "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: none, Locked: yes"
+    ``cloud``, Minimal, "One partition, LVM",          "Group: ``wheel``, Password: unset, SSH Keys: none, Locked: yes",               "Password: unset, SSH Keys: none, Locked: yes"
+    ``cloud-cis``, Minimal, "CIS-recommended, LVM",    "Group: ``wheel``, Password: unset, SSH Keys: none, Locked: yes",               "Password: unset, SSH Keys: none, Locked: yes"
+    ``minimal`` (default if ommitted), Minimal, "One partition, LVM",        "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: Linuxfabrik, Locked: yes"
 
 
 How to use
