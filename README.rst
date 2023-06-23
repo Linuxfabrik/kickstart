@@ -7,9 +7,27 @@ This is a generic kickstart file for a minimal install of RHEL 7+ and compatible
 What are Kickstart Installations?
 ---------------------------------
 
-Kickstart files contain answers to all questions normally asked by the installation program, such as what time zone you want the system to use, how the drives should be partitioned, or which packages should be installed. Providing a prepared Kickstart file when the installation begins therefore allows you to perform the installation automatically, without need for any intervention from the user. This is especially useful when deploying Red Hat Enterprise Linux (RHEL) on a large number of systems at once.
+Kickstart files contain answers to all questions normally asked by the installation program, such as what time zone you want the system to use, how the drives should be partitioned, or which packages should be installed. Providing a prepared kickstart file when the installation begins therefore allows you to perform the installation automatically, without need for any intervention from the user. This is especially useful when deploying Red Hat Enterprise Linux (RHEL) on a large number of systems at once.
 
-Kickstart files can be kept on a single server system and read by individual computers during the installation. This installation method can support the use of a single Kickstart file to install RHEL and compatible on multiple machines, making it ideal for network and system administrators. (`Source <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/chap-kickstart-installations>`_)
+Kickstart files can be kept on a single server system and read by individual computers during the installation. This installation method can support the use of a single kickstart file to install RHEL and compatible on multiple machines, making it ideal for network and system administrators. (`Source <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/chap-kickstart-installations>`_)
+
+
+How to use
+----------
+
+This kickstart file can be used by booting from an ISO file, then pressing ``ESC`` on the first screen and providing these cmdline arguments:
+
+.. code-block:: text
+
+    # Line breaks are only for better readability
+
+    boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg \
+        lftype=[cis|cloud|cloud-cis|minimal] \
+        [lfdisk=$DISK] \
+        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER]
+        [...]
+
+Note that ``ip=`` is an array, so the brackets are mandatory, and you can provide multiple ip addresses.
 
 
 What this Kickstart File does
@@ -33,21 +51,20 @@ The kickstart file can be used to install different types of minimal installs by
     ``minimal`` (default if ommitted), Minimal, "One partition, LVM",        "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: Linuxfabrik, Locked: yes"
 
 
-How to use
-----------
+Useful Kernel Cmdline Arguments
+-------------------------------
 
-This Kickstart file can be used by booting from an ISO file, then pressing ``ESC`` on the first screen and providing these cmdline arguments:
+`RHEL <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_:
 
-.. code-block:: text
+* ``inst.loglevel=[debug|info]``
+* ``inst.ks=[hd:<device>:<path>|[http,https,ftp]://<host>/<path>|nfs:[<options>:]<server>:/<path>`` (MANDATORY)
+* ``inst.noverifyssl``
+* ``inst.nosave=[<option1>,]<option2>`` (options: ``input_ks,output_ks,all_ks,logs,all``)
+* ``inst.rescue``
 
-    # Line breaks are only for better readability
+Linuxfabrik:
 
-    boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg \
-        lftype=[minimal|cis|cloud|cloud-cis] \
-        [lfdisk=$DISK] \
-        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER]
-
-Note that the ip address field is an array, so the brackets are mandatory, and you can list multiple ip addresses there.
+* ``lfdisk=$DISK``: For example, use ``sda`` for installation (defaults to ``vda`` if omitted).
 
 
 Modifying this Kickstart
@@ -67,26 +84,10 @@ This kickstart uses an additional kickstart ``/tmp/dynamic.ks`` in a kickstart p
   | A multiline string containing the postscript for ``<lftype>``. Will be executed by ``/bin/sh``.
 
 
-Useful Kernel Cmdline Arguments
--------------------------------
-
-`RHEL <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_:
-
-* ``inst.loglevel=[debug|info]``
-* ``inst.ks=[hd:<device>:<path>|[http,https,ftp]://<host>/<path>|nfs:[<options>:]<server>:/<path>`` (MANDATORY)
-* ``inst.noverifyssl``
-* ``inst.nosave=[<option1>,]<option2>`` (options: ``input_ks,output_ks,all_ks,logs,all``)
-* ``inst.rescue``
-
-Linuxfabrik:
-
-* ``lfdisk=$DISK``: For example, use ``sda`` for installation (defaults to ``vda`` if omitted).
-
-
 Known Limitations
 -----------------
 
-This Kickstart file does not work for RHEL 6- (and compatible).
+This kickstart file does not work for RHEL 6- (and compatible).
 
 
 Tested
