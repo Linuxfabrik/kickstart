@@ -30,7 +30,7 @@ The kickstart file can be used to install different types of minimal installs by
     ``cis``, Minimal, CIS-recommended,          "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: none, Locked: yes"
     ``cloud``, Minimal, One partition,          "Group: ``wheel``, Password: unset, SSH Keys: none, Locked: yes",               "Password: unset, SSH Keys: none, Locked: yes"
     ``cloud-cis``, Minimal, CIS-recommended,    "Group: ``wheel``, Password: unset, SSH Keys: none, Locked: yes",               "Password: unset, SSH Keys: none, Locked: yes"
-    ``minimal``, Minimal, One partition,        "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: Linuxfabrik, Locked: yes"
+    ``minimal`` (default if ommitted), Minimal, One partition,        "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: Linuxfabrik, Locked: yes"
 
 
 How to use
