@@ -12,8 +12,8 @@ Kickstart files contain answers to all questions normally asked by the installat
 Kickstart files can be kept on a single server system and read by individual computers during the installation. This installation method can support the use of a single Kickstart file to install RHEL and compatible on multiple machines, making it ideal for network and system administrators. (`Source <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/chap-kickstart-installations>`_)
 
 
-What this Kickstart File do
----------------------------
+What this Kickstart File does
+-----------------------------
 
 * Supports RHEL 7+ and compatible.
 * Works on legacy BIOS as well as UEFI.
