@@ -70,7 +70,7 @@ This kickstart uses an additional kickstart ``/tmp/dynamic.ks`` in a kickstart p
 Useful Kernel Cmdline Arguments
 -------------------------------
 
-RHEL:
+`RHEL <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_:
 
 * ``inst.loglevel=[debug|info]``
 * ``inst.ks=[hd:<device>:<path>|[http,https,ftp]://<host>/<path>|nfs:[<options>:]<server>:/<path>`` (MANDATORY)
@@ -97,6 +97,13 @@ Tested using these ISO-images:
 * Fedora 37+
 * RHEL 8+
 * CentOS 7 BIOS
+
+
+Troubleshooting
+---------------
+
+* ``page_poison=1`` kernel cmdline option installed by bootloader cmd can leave the system unbootable due to a buggy UEFI firmware. This was observed with TianoCore firmware on qemu. Remove this option to boot. See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/8.7_release_notes/known-issues.
+* Fedora 38: We observed problems booting into the installer. Try ``inst.neednet=1 rd.debug`` to get to the installer.
 
 
 Kickstart Syntax References
