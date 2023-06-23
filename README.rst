@@ -15,19 +15,17 @@ Kickstart files can be kept on a single server system and read by individual com
 How to use
 ----------
 
-This kickstart file can be used by booting from an ISO file, then pressing ``ESC`` on the first screen and providing these cmdline arguments:
+This kickstart file can be used by booting from an ISO file, then pressing ``ESC`` on the first screen and providing these cmdline arguments (line breaks are only for better readability):
 
 .. code-block:: text
 
-    # Line breaks are only for better readability
-
-    boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg \
-        lftype=[cis|cloud|cloud-cis|minimal] \
-        [lfdisk=$DISK] \
+    boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
+        [lftype=cis|cloud|cloud-cis|minimal]
+        [lfdisk=$DISK]
         [ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER]
         [...]
 
-Note that ``ip=`` is an array, so the brackets are mandatory, and you can provide multiple ip addresses.
+Note that ``ip=`` is an array (for providing multiple ip addresses), so the inner brackets are mandatory.
 
 
 What this Kickstart File does
@@ -35,8 +33,7 @@ What this Kickstart File does
 
 * Supports RHEL 7+ and compatible.
 * Works on legacy BIOS as well as UEFI.
-* | Can be installed on a user-defined disk by specifying the kernel cmdline argument
-  | ``lfdisk=$DISK`` (``$DISK`` defaults to ``vda`` if ommitted)
+* Can be installed on a user-defined disk by specifying the kernel cmdline argument ``lfdisk=$DISK`` (where ``$DISK`` defaults to ``vda`` if ommitted)
 * The kickstart file is intended to provide a minimal installation.
 
 The kickstart file can be used to install different types of minimal installs by setting the kernel cmdline argument ``lftype=``:
@@ -54,13 +51,14 @@ The kickstart file can be used to install different types of minimal installs by
 Useful Kernel Cmdline Arguments
 -------------------------------
 
-`RHEL <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_:
+RHEL:
 
 * ``inst.loglevel=[debug|info]``
 * ``inst.ks=[hd:<device>:<path>|[http,https,ftp]://<host>/<path>|nfs:[<options>:]<server>:/<path>`` (MANDATORY)
 * ``inst.noverifyssl``
 * ``inst.nosave=[<option1>,]<option2>`` (options: ``input_ks,output_ks,all_ks,logs,all``)
 * ``inst.rescue``
+* `more... <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_
 
 Linuxfabrik:
 
