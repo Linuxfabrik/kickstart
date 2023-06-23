@@ -39,7 +39,7 @@ What this Kickstart File does
   | ``lfdisk=$DISK`` (``$DISK`` defaults to ``vda`` if ommitted)
 * The kickstart file is intended to provide a minimal installation.
 
-The kickstart file can be used to install different types of minimal installs by setting the kernel cmdline argument ``lftype=``
+The kickstart file can be used to install different types of minimal installs by setting the kernel cmdline argument ``lftype=``:
 
 .. csv-table::
     :header-rows: 1
