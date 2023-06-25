@@ -68,7 +68,7 @@ Linuxfabrik:
 Modifying this Kickstart
 ------------------------
 
-This kickstart uses an additional kickstart ``/tmp/dynamic.ks`` in a kickstart pre-script. At the beginning of the pre-script it determines which version of Python is available and then writes and executes a Python script ``/tmp/pre-script.py``. This Python script can be modified as follows:
+This kickstart includes an additional kickstart ``/tmp/dynamic.ks``. This ``/tmp/dynamic.ks`` file gets generated in a kickstart pre-script. At the beginning of the pre-script it determines which version of Python is available and then writes and executes a Python script ``/tmp/pre-script.py`` which on it's turn generates the ``/tmp/dynamic.ks``. This Python script can be modified as follows:
 
 * | ``lfkeys``
   | An array of SSH keys that will be installed for either the ``root`` or ``linuxfabrik`` user depending on ``lftype`` as documented above.
@@ -93,8 +93,9 @@ Tested
 
 Tested using these ISO-images:
 
-* Fedora 37+
-* RHEL 8+
+* Fedora 37+ UEFI/BIOS
+* RHEL 9+ UEFI/BIOS
+* RHEL 8+ UEFI/BIOS
 * CentOS 7 BIOS
 
 
