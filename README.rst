@@ -75,8 +75,8 @@ RHEL:
 
 Specific to this kickstart file:
 
-* ``lfdisk=$DISK``: navid-todo
-* ``lftype``: navid-todo. Defaults to ``minimal``
+* ``lfdisk=$DISK``: User-defined disk for installing the OS. Default: unset (so tries to find the first block device, in the order ``vda`` > ``sda`` > ``nvme0n1``, and fails otherwise).
+* ``lftype``: See table above. Defaults to ``minimal``.
 
 
 Modifying this Kickstart
