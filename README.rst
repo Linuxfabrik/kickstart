@@ -15,7 +15,9 @@ Kickstart files can be kept on a single server system and read by individual com
 How to use
 ----------
 
-This kickstart file can be used by booting from an ISO file, then pressing ``ESC`` on the first screen and providing these cmdline arguments (line breaks are only for better readability):
+This kickstart file can be used by booting from an ISO file, then either
+
+* BIOS: pressing ``ESC`` on the first screen and providing these cmdline arguments (line breaks are only for better readability):
 
 .. code-block:: text
 
@@ -25,7 +27,17 @@ This kickstart file can be used by booting from an ISO file, then pressing ``ESC
         [ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER]
         [...]
 
-Note that ``ip=`` is an array (for providing multiple ip addresses), so the inner brackets are mandatory.
+* UEFI: pressing ``e`` on the "Install ..." entry and appending the following to the ``linuxefi`` cmdline (line breaks are only for better readability), then booting by pressing ``Ctrl-X``.
+
+.. code-block:: text
+
+    linuxefi ... inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
+        [lftype=cis|cloud|cloud-cis|minimal]
+        [lfdisk=$DISK]
+        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER]
+        [...]
+
+Note that ``ip=`` is an array (for providing multiple IP addresses), so the inner brackets are mandatory.
 
 
 What this Kickstart File does
@@ -33,19 +45,21 @@ What this Kickstart File does
 
 * Supports RHEL 7+ and compatible.
 * Works on legacy BIOS as well as UEFI.
-* Can be installed on a user-defined disk by specifying the kernel cmdline argument ``lfdisk=$DISK`` (where ``$DISK`` defaults to ``vda`` if ommitted)
+* Can be installed on a user-defined disk by specifying the kernel cmdline argument ``lfdisk=$DISK``. If unset, it tries to find the first block device, in the order ``vda`` > ``sda`` > ``nvme0n1``, and fails otherwise.
 * The kickstart file is intended to provide a minimal installation.
 
 The kickstart file can be used to install different types of minimal installs by setting the kernel cmdline argument ``lftype=``:
 
+The ``root`` user is always locked, has no password and no SSH keys. Login with the ``linuxfabrik`` user, which is also part of the the ``wheel`` group. This means you can use ``sudo`` to gain root.
+
 .. csv-table::
     :header-rows: 1
 
-    ``lftype=``, Install Type, Partitioning Scheme, User ``linuxfabrik``, User ``root``
-    ``cis``, Minimal, "CIS-recommended, LVM",          "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: none, Locked: yes"
-    ``cloud``, Minimal, "One partition, LVM",          "Group: ``wheel``, Password: unset, SSH Keys: none, Locked: yes",               "Password: unset, SSH Keys: none, Locked: yes"
-    ``cloud-cis``, Minimal, "CIS-recommended, LVM",    "Group: ``wheel``, Password: unset, SSH Keys: none, Locked: yes",               "Password: unset, SSH Keys: none, Locked: yes"
-    ``minimal`` (default if ommitted), Minimal, "One partition, LVM",        "Group: ``wheel``, Password: ``password``, SSH Keys: Linuxfabrik, Locked: no",  "Password: unset, SSH Keys: Linuxfabrik, Locked: yes"
+    ``lftype=``,             Install Type,   Partitioning Scheme,      User ``linuxfabrik``: Password,   User ``linuxfabrik``: SSH Keys,     User ``linuxfabrik``: Locked
+    ``cis``,                 Minimal,        "CIS-recommended, LVM",   ``password``,                     Linuxfabrik,                        no
+    ``cloud``,               Minimal,        "One partition, LVM",     unset,                            none (inject via ``cloud-init``),   yes
+    ``cloud-cis``,           Minimal,        "CIS-recommended, LVM",   unset,                            none (inject via ``cloud-init``),   yes
+    ``minimal`` (default),   Minimal,        "One partition, LVM",     ``password``,                     Linuxfabrik,                        no
 
 
 Useful Kernel Cmdline Arguments
@@ -60,9 +74,10 @@ RHEL:
 * ``inst.rescue``
 * `more... <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_
 
-Linuxfabrik:
+Specific to this kickstart file:
 
-* ``lfdisk=$DISK``: For example, use ``sda`` for installation (defaults to ``vda`` if omitted).
+* ``lfdisk=$DISK``: navid-todo
+* ``lftype``: navid-todo. Defaults to ``minimal``
 
 
 Modifying this Kickstart
@@ -106,9 +121,11 @@ Troubleshooting
 * Fedora 38: We observed problems booting into the installer. Try ``inst.neednet=1 rd.debug`` to get to the installer.
 
 
-Kickstart Syntax References
----------------------------
+References
+----------
 
-* `Fedora <https://docs.fedoraproject.org/en-US/fedora/f34/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-bootloader>`_
-* `RHEL 7 <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax>`_
-* `RHEL 8 <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user>`_
+* `Fedora Kickstart Syntax <https://docs.fedoraproject.org/en-US/fedora/f34/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-bootloader>`_
+* `RHEL 7 Kickstart Syntax <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax>`_
+* `RHEL 8 Kickstart Syntax <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user>`_
+* `Rocky 8 Generic Cloud LVM Kickstart <https://git.resf.org/sig_core/kickstarts/src/branch/r8/Rocky-8-GenericCloud-LVM.ks>`_
+* `OpenStack Image Requirements <https://docs.openstack.org/image-guide/openstack-images.html>`_
