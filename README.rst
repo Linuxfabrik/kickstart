@@ -83,7 +83,10 @@ Specific to this kickstart file:
 Modifying this Kickstart
 ------------------------
 
-This kickstart includes an additional kickstart ``/tmp/dynamic.ks``. This ``/tmp/dynamic.ks`` file gets generated in a kickstart pre-script. At the beginning of the pre-script it determines which version of Python is available and then writes and executes a Python script ``/tmp/pre-script.py`` which on it's turn generates the ``/tmp/dynamic.ks``. This Python script can be modified as follows:
+This kickstart includes an additional kickstart ``/tmp/dynamic.ks``. This ``/tmp/dynamic.ks`` file is generated in a kickstart pre-script.
+At the beginning of the pre-script the available Python version is determined, the Python script is written to ``/tmp/pre-script.py`` and executed.
+The Python script then generates the ``/tmp/dynamic.ks``.
+This Python script can be modified as follows:
 
 * | ``lfkeys``
   | An array of SSH keys that will be installed for either the ``root`` or ``linuxfabrik`` user depending on ``lftype`` as documented above.
