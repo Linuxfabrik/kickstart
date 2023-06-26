@@ -45,21 +45,20 @@ What this Kickstart File does
 
 * Supports RHEL 7+ and compatible.
 * Works on legacy BIOS as well as UEFI.
+* The kickstart file is intended to provide a minimal installation, with ``firewalld`` disabled and SELinux in "Enforcing" mode.
 * Can be installed on a user-defined disk by specifying the kernel cmdline argument ``lfdisk=$DISK``. If unset, it tries to find the first block device, in the order ``vda`` > ``sda`` > ``nvme0n1``, and fails otherwise.
-* The kickstart file is intended to provide a minimal installation.
+* There are two users: ``linuxfabrik`` and ``root``. The root account is always locked by default. This means that the root user will not be able to log in from any console. ``root`` has no password and no SSH keys. Login with the ``linuxfabrik`` user, which is also part of the the ``wheel`` group. ``sudo`` is configured to gain root.
 
 The kickstart file can be used to install different types of minimal installs by setting the kernel cmdline argument ``lftype=``:
-
-The ``root`` user is always locked, has no password and no SSH keys. Login with the ``linuxfabrik`` user, which is also part of the the ``wheel`` group. This means you can use ``sudo`` to gain root.
 
 .. csv-table::
     :header-rows: 1
 
-    ``lftype=``,             Install Type,   Partitioning Scheme,      User ``linuxfabrik``: Password,   User ``linuxfabrik``: SSH Keys,     User ``linuxfabrik``: Locked
-    ``cis``,                 Minimal,        "CIS-recommended, LVM",   ``password``,                     Linuxfabrik,                        no
-    ``cloud``,               Minimal,        "One partition, LVM",     unset,                            none (inject via ``cloud-init``),   yes
-    ``cloud-cis``,           Minimal,        "CIS-recommended, LVM",   unset,                            none (inject via ``cloud-init``),   yes
-    ``minimal`` (default),   Minimal,        "One partition, LVM",     ``password``,                     Linuxfabrik,                        no
+    ``lftype=``,             Install Type,   Partitioning Scheme,   Password of User ``linuxfabrik``,   SSH Keys of User ``linuxfabrik``
+    ``cis``,                 Minimal,        "CIS, LVM",            ``password``,                       Those of Linuxfabrik
+    ``cloud``,               Minimal,        "One partition, LVM",  unset (inject via ``cloud-init``),  none (inject via ``cloud-init``)
+    ``cloud-cis``,           Minimal,        "CIS, LVM",            unset (inject via ``cloud-init``),  none (inject via ``cloud-init``)
+    ``minimal`` (default),   Minimal,        "One partition, LVM",  ``password``,                       Those of Linuxfabrik
 
 
 Useful Kernel Cmdline Arguments
