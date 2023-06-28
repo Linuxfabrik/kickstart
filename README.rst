@@ -105,15 +105,31 @@ Known Limitations
 This kickstart file does not work for RHEL 6- (and compatible).
 
 
-Tested
-------
+Tests
+-----
 
-Tested using these ISO-images:
+Test combinations:
 
-* Fedora 37+ UEFI/BIOS
-* RHEL 9+ UEFI/BIOS
-* RHEL 8+ UEFI/BIOS
-* CentOS 7 BIOS
+* OS: centos7, rocky8, rocky9
+* Firmware: BIOS, UEFI
+* Disk: vda, sda
+* ``lftype``: ``cis``, ``cloud``, ``cloud-cis``, ``minimal``
+
+What to test within the VM:
+
+* Console login using "root" + "password": Should not work.
+* Console login using "linuxfabrik" + "password": Should work on non-cloud. On cloud, password depends on cloud-init.
+* ``ip a``: Should get an IP.
+* ``ssh root@vm``: Should not work.
+* ``ssh linuxfabrik@vm``: Should work on non-cloud. On cloud, it depends on cloud-init.
+* ``sudo su -``: Should work.
+* ``cat /etc/shadow``: Should show that root's password is locked.
+* ``dh -hT``: One partition on non-cis, 7 partitions on cis.
+* ``lvs``: Should work.
+* ``sudo dnf -y install nano``: Should work.
+* ``systemctl status cloud-init``: Not found on non-cloud, should work on cloud.
+* ``systemctl status firewalld``: Should work.
+* ``ll /root``: Should list at least two Anaconda files.
 
 
 Troubleshooting
