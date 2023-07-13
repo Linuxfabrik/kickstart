@@ -68,7 +68,7 @@ RHEL:
 
 * ``inst.loglevel=[debug|info]``
 * ``inst.ks=[hd:<device>:<path>|[http,https,ftp]://<host>/<path>|nfs:[<options>:]<server>:/<path>`` (MANDATORY)
-* ``inst.noverifyssl``
+* ``inst.noverifyssl``: Prevents Anaconda from verifying the ssl certificate for all HTTPS connections ("insecure").
 * ``inst.nosave=[<option1>,]<option2>`` (options: ``input_ks,output_ks,all_ks,logs,all``)
 * ``inst.rescue``
 * `more... <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_
