@@ -43,7 +43,7 @@ Note that ``ip=`` is an array (for providing multiple IP addresses), so the inne
 What this Kickstart File does
 -----------------------------
 
-* Supports RHEL 7+ and compatible (See:[Tests](#tests)).
+* Supports RHEL 7+ and compatible (See: `Tests <Tests_>`_).
 * Works on legacy BIOS as well as UEFI.
 * The kickstart file is intended to provide a minimal installation, with ``firewalld`` disabled and SELinux in "Enforcing" mode.
 * Can be installed on a user-defined disk by specifying the kernel cmdline argument ``lfdisk=$DISK``. If unset, it tries to find the first block device, in the order ``vda`` > ``sda`` > ``nvme0n1``, and fails otherwise.
@@ -110,6 +110,7 @@ Known Limitations
 
 This kickstart file does not work for RHEL 6- (and compatible).
 
+.. _Tests:
 Tests
 -----
 
