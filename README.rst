@@ -100,12 +100,8 @@ Then there is one array containing SSH keys.
 
 * ``lfkeys``: An array of SSH keys that will be installed for either the ``root`` or ``linuxfabrik`` user depending on ``lftype`` as documented above.
 
-.. _Extending the kickstart file:
-
 Extending the kickstart file
 ----------------------------
-
-`Extending the kickstart file <Extending the kickstart file_>`_
 
 As described in `Modifying this Kickstart <Modifying this Kickstart_>`_ each of these dictonaries can be extended with a new ``<lftype>`` key where the value contains the new ``<lftype>`` ``bootloader`` string, ``package`` array, ``part`` array, ``post`` multi-line string and ``user`` string. Once all these dictonaries contain a valid entry for the new ``<lftype>``, we can issue this new installation using the kernel cmdline argument ``lftype=<lftype>``.
 
