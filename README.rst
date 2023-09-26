@@ -43,7 +43,7 @@ Note that ``ip=`` is an array (for providing multiple IP addresses), so the inne
 What this Kickstart File does
 -----------------------------
 
-* Supports RHEL 7+ and compatible.
+* Supports RHEL 7+ and compatible (See:[Tests](#tests)).
 * Works on legacy BIOS as well as UEFI.
 * The kickstart file is intended to provide a minimal installation, with ``firewalld`` disabled and SELinux in "Enforcing" mode.
 * Can be installed on a user-defined disk by specifying the kernel cmdline argument ``lfdisk=$DISK``. If unset, it tries to find the first block device, in the order ``vda`` > ``sda`` > ``nvme0n1``, and fails otherwise.
@@ -60,6 +60,7 @@ The kickstart file can be used to install different types of minimal installs by
     ``cloud-cis``,           Minimal,        "CIS, LVM",            unset (inject via ``cloud-init``),  none (inject via ``cloud-init``)
     ``minimal`` (default),   Minimal,        "One partition, LVM",  ``password``,                       Those of Linuxfabrik
 
+See `Extending the kickstart file <Extending the kickstart file_>`_ on how to define a custom ``lftype``
 
 Useful Kernel Cmdline Arguments
 -------------------------------
@@ -79,38 +80,46 @@ Specific to this kickstart file:
 * ``lftype``: See table above. Defaults to ``minimal``.
 
 
+.. _Modifying this kickstart:
 Modifying this Kickstart
 ------------------------
 
 This kickstart includes an additional kickstart ``/tmp/dynamic.ks``. This ``/tmp/dynamic.ks`` file is generated in a kickstart pre-script.
 At the beginning of the pre-script the available Python version is determined, the Python script is written to ``/tmp/pre-script.py`` and executed.
-The Python script then generates the ``/tmp/dynamic.ks``.
-This Python script can be modified as follows:
+The Python script then generates the included ``/tmp/dynamic.ks`` kickstart file.
+This Python script contains 5 dictonaries with ``<lftype>`` as key and the values as described below:
 
-* | ``lfkeys``
-  | An array of SSH keys that will be installed for either the ``root`` or ``linuxfabrik`` user depending on ``lftype`` as documented above.
-* | ``packages_<lftype>``
-  | An array with package names for a ``<lftype>`` install.
-* | ``part_<lftype>``
-  | An array of kickstart ``logvol`` lines that define logical volumes for ``<lftype>`` as documented in Fedora Kickstart Syntax Reference: `logvol <https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-logvol>`_
-* | ``users_<lftype>``
-  | A string containing a ":" separated list in the form ``name="<username>":cmd="<kickstart command used for user creation>":keys="<array of ssh-keys to add>"`` (Fedora Kickstart Syntax Reference: `user <https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-user>`_, `rootpw <https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-rootpw>`_)
-* | ``post_<lftype>``
-  | A multiline string containing the postscript for ``<lftype>``. Will be executed by ``/bin/sh``.
 
+* ``Bootloader``: A string with a kickstarter ``bootloader`` command as described at Fedora Kickstart Syntax Reference: `bootloader <https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-bootloader>`_)
+* ``Packages``: An array with package names/groups to install or exclude. A group is preseded with a ``@`` an exclude is preseded with a ``-``.
+* ``Part``: An array of kickstart ``logvol`` lines that define logical volumes for ``<lftype>`` as documented in Fedora Kickstart Syntax Reference: `logvol <https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-logvol>`_
+* ``Post``: A multiline string containing the postscript for ``<lftype>``. Will be executed by ``/bin/sh``.
+* ``Users``: A string containing a ":" separated list in the form ``name="<username>":cmd="<kickstart command used for user creation>":keys="<array of ssh-keys to add>"`` Fedora Kickstart Syntax Reference: `user <https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-user>`_, `rootpw <https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-rootpw>`_)
+
+Then there is one array containing SSH keys.
+
+* ``lfkeys``: An array of SSH keys that will be installed for either the ``root`` or ``linuxfabrik`` user depending on ``lftype`` as documented above.
+
+.. _Extending the kickstart file:
+
+Extending the kickstart file
+----------------------------
+
+`Extending the kickstart file <Extending the kickstart file_>`_
+
+As described in `Modifying this Kickstart <Modifying this Kickstart_>`_ each of these dictonaries can be extended with a new ``<lftype>`` key where the value contains the new ``<lftype>`` ``bootloader`` string, ``package`` array, ``part`` array, ``post`` multi-line string and ``user`` string. Once all these dictonaries contain a valid entry for the new ``<lftype>``, we can issue this new installation using the kernel cmdline argument ``lftype=<lftype>``.
 
 Known Limitations
 -----------------
 
 This kickstart file does not work for RHEL 6- (and compatible).
 
-
 Tests
 -----
 
-Test combinations:
+Tested combinations:
 
-* OS: centos7, rocky8, rocky9
+* OS: AlmaLinux 8.8, CentOS 7(only BIOS), Fedora 35(only BIOS), 37, 38, RHEL 7(only BIOS), 8, 9, Rocky8, Rocky9
 * Firmware: BIOS, UEFI
 * Disk: vda, sda
 * ``lftype``: ``cis``, ``cloud``, ``cloud-cis``, ``minimal``
@@ -142,8 +151,9 @@ Troubleshooting
 References
 ----------
 
-* `Fedora Kickstart Syntax <https://docs.fedoraproject.org/en-US/fedora/f34/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-bootloader>`_
+* `Fedora Kickstart Syntax <https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-bootloader>`_
 * `RHEL 7 Kickstart Syntax <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax>`_
-* `RHEL 8 Kickstart Syntax <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user>`_
+* `RHEL 8 Kickstart Syntax <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/system_design_guide/kickstart_references>`_
+* `RHEL 9 Kickstart Syntax <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/performing_an_advanced_rhel_9_installation/kickstart_references>`_
 * `Rocky 8 Generic Cloud LVM Kickstart <https://git.resf.org/sig_core/kickstarts/src/branch/r8/Rocky-8-GenericCloud-LVM.ks>`_
 * `OpenStack Image Requirements <https://docs.openstack.org/image-guide/openstack-images.html>`_
