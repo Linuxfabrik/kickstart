@@ -24,7 +24,8 @@ This kickstart file can be used by booting from an ISO file, then either
     boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
         [lftype=cis|cloud|cloud-cis|minimal]
         [lfdisk=$DISK]
-        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER]
+        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none]
+        [nameserver=NAMESERVER]
         [...]
 
 * UEFI: pressing ``e`` on the "Install ..." entry and appending the following to the ``linuxefi`` cmdline (line breaks are only for better readability), then booting by pressing ``Ctrl-X``.
@@ -34,7 +35,8 @@ This kickstart file can be used by booting from an ISO file, then either
     linuxefi ... inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
         [lftype=cis|cloud|cloud-cis|minimal]
         [lfdisk=$DISK]
-        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none nameserver=NAMESERVER]
+        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none]
+        [nameserver=NAMESERVER]
         [...]
 
 Note that ``ip=`` is an array (for providing multiple IP addresses), so the inner brackets are mandatory.
