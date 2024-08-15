@@ -24,7 +24,7 @@ This kickstart file can be used by booting from an ISO file, then either
     boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
         [lftype=cis|cloud|cloud-cis|minimal]
         [lfdisk=$DISK]
-        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none]
+        [ip=[IPADDRESS]::GATEWAY:NETMASK::INTERFACE:none]
         [nameserver=NAMESERVER]
         [...]
 
@@ -35,7 +35,7 @@ This kickstart file can be used by booting from an ISO file, then either
     linuxefi ... inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
         [lftype=cis|cloud|cloud-cis|minimal]
         [lfdisk=$DISK]
-        [ip=[IPADDRESS]::GATEWAY:NETMASK:::none]
+        [ip=[IPADDRESS]::GATEWAY:NETMASK::INTERFACE:none]
         [nameserver=NAMESERVER]
         [...]
 
