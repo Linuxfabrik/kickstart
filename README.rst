@@ -75,7 +75,7 @@ RHEL:
 * ``inst.noverifyssl``: Prevents Anaconda from verifying the ssl certificate for all HTTPS connections ("insecure")
 * ``inst.nosave=[<option1>,]<option2>`` (options: ``input_ks,output_ks,all_ks,logs,all``)
 * ``inst.rescue``
-* `more... <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_
+* `more Kernel Cmdline Arguments <https://anaconda-installer.readthedocs.io/en/latest/boot-options.html>`_
 
 Specific to this kickstart file:
 
@@ -141,6 +141,7 @@ Troubleshooting
 
 * ``page_poison=1`` kernel cmdline option installed by bootloader cmd can leave the system unbootable due to a buggy UEFI firmware. This was observed with TianoCore firmware on qemu. Remove this option to boot. See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/8.7_release_notes/known-issues.
 * Fedora 38: We observed problems booting into the installer. Try ``inst.neednet=1 rd.debug`` to get to the installer.
+* Last resort: If this Kickstart file doesn't work, copy it to a webserver and modify it to suit your needs.
 
 
 References
