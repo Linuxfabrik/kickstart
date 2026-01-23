@@ -128,7 +128,7 @@ What to test within the VM:
 * ``ssh linuxfabrik@vm``: Should work on non-cloud. On cloud, it depends on cloud-init.
 * ``sudo su -``: Should work.
 * ``cat /etc/shadow``: Should show that root's password is locked.
-* ``df -hT``: One partition on non-cis, 7 partitions on cis.
+* ``df -hT``: One partition on non-cis, eight partitions on cis.
 * ``lvs``: Should work.
 * ``sudo dnf -y install nano``: Should work.
 * ``systemctl status cloud-init``: Not found on non-cloud, should work on cloud.
