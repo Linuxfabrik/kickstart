@@ -21,7 +21,7 @@ This kickstart file can be used by booting from an ISO file, then either
 
 .. code-block:: text
 
-    boot: linux inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
+    boot: linux inst.ks=https://linuxfabrik.ch/ks
         [lftype=cis|cloud|cloud-cis|minimal]
         [lfdisk=$DISK]
         [ip=[IPADDRESS]::GATEWAY:NETMASK::INTERFACE:none]
@@ -32,7 +32,7 @@ This kickstart file can be used by booting from an ISO file, then either
 
 .. code-block:: text
 
-    linuxefi ... inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
+    linuxefi ... inst.ks=https://linuxfabrik.ch/ks
         [lftype=cis|cloud|cloud-cis|minimal]
         [lfdisk=$DISK]
         [ip=[IPADDRESS]::GATEWAY:NETMASK::INTERFACE:none]
@@ -41,7 +41,7 @@ This kickstart file can be used by booting from an ISO file, then either
 
 Note that ``ip=`` is an array (for providing multiple IP addresses), so the inner brackets are mandatory.
 
-For convenience, we provide http://linuxfabrik.ch/ks as a shortened URL to https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg.
+For convenience, we provide https://linuxfabrik.ch/ks as a shortened URL to https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg.
 
 
 What this Kickstart File does
