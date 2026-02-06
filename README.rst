@@ -32,7 +32,7 @@ This kickstart file can be used by booting from an ISO file, then either
 
 .. code-block:: text
 
-    linuxefi ... inst.ks=https://raw.githubusercontent.com/Linuxfabrik/kickstart/main/lf-rhel.cfg
+    linuxefi ... inst.ks=https://linuxfabrik.ch/ks
         [lftype=cis|cloud|cloud-cis|minimal]
         [lfdisk=$DISK]
         [ip=[IPADDRESS]::GATEWAY:NETMASK::INTERFACE:none]
