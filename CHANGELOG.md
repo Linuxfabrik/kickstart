@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [1.1.0] - 2026-03-10
+
+### Added
+
+* `lf-debian.cfg`: Debian preseed configuration (Debian 11+) with LVM partitioning, matching the RHEL kickstart's minimal type
+* `lf-ubuntu.cfg`: Ubuntu autoinstall configuration (Ubuntu 20.04+) with LVM partitioning, matching the RHEL kickstart's minimal type
+
+
 ## [1.0.0] - 2026-03-10
 
 ### Added
