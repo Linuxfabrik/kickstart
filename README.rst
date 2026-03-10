@@ -1,7 +1,7 @@
 Generic Kickstart File
 ======================
 
-This is a generic kickstart file for a minimal install of RHEL 7+ and compatible, on both BIOS as well as UEFI machines.
+This is a generic kickstart file for a minimal install of RHEL 8+, Fedora 38+ and compatible, on both BIOS as well as UEFI machines.
 
 
 What are Kickstart Installations?
@@ -9,7 +9,7 @@ What are Kickstart Installations?
 
 Kickstart files contain answers to all questions normally asked by the installation program, such as what time zone you want the system to use, how the drives should be partitioned, or which packages should be installed. Providing a prepared kickstart file when the installation begins therefore allows you to perform the installation automatically, without need for any intervention from the user. This is especially useful when deploying Red Hat Enterprise Linux (RHEL) on a large number of systems at once.
 
-Kickstart files can be kept on a single server system and read by individual computers during the installation. This installation method can support the use of a single kickstart file to install RHEL and compatible on multiple machines, making it ideal for network and system administrators. (`Source <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/chap-kickstart-installations>`_)
+Kickstart files can be kept on a single server system and read by individual computers during the installation. This installation method can support the use of a single kickstart file to install RHEL and compatible on multiple machines, making it ideal for network and system administrators. (`Source <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/automatically_installing_rhel/kickstart-script-file-format-reference_rhel-installer>`_)
 
 
 How to use
@@ -47,22 +47,22 @@ For convenience, we provide https://linuxfabrik.ch/ks as a shortened URL to http
 What this Kickstart File does
 -----------------------------
 
-* Supports RHEL 7+ and compatible.
+* Supports RHEL 8+, Fedora 38+ and compatible.
 * Works on legacy BIOS as well as UEFI.
 * The kickstart file is intended to provide a minimal installation, with ``firewalld`` disabled and SELinux in "Enforcing" mode.
 * Can be installed on a user-defined disk by specifying the kernel cmdline argument ``lfdisk=$DISK``. If unset, it tries to find the first block device, in the order ``vda`` > ``sda`` > ``nvme0n1``, and fails otherwise.
-* There are two users: ``linuxfabrik`` and ``root``. The root account is always locked by default. This means that the root user will not be able to log in from any console. ``root`` has no password and no SSH keys. Login with the ``linuxfabrik`` user, which is also part of the the ``wheel`` group. ``sudo`` is configured to gain root.
+* There are two users: ``linuxfabrik`` and ``root``. The root account is always locked and has no password or SSH keys. Login with the ``linuxfabrik`` user, which is also part of the ``wheel`` group. ``sudo`` is configured to gain root.
 
 The kickstart file can be used to install different types of minimal installs by setting the kernel cmdline argument ``lftype=``:
 
 .. csv-table::
     :header-rows: 1
 
-    ``lftype=``,             Install Type,   Partitioning Scheme,   Password of User ``linuxfabrik``,   SSH Keys of User ``linuxfabrik``
-    ``cis``,                 Minimal,        "CIS, LVM",            ``password``,                       Those of Linuxfabrik
-    ``cloud``,               Minimal,        "One partition, LVM",  unset (inject via ``cloud-init``),  none (inject via ``cloud-init``)
-    ``cloud-cis``,           Minimal,        "CIS, LVM",            unset (inject via ``cloud-init``),  none (inject via ``cloud-init``)
-    ``minimal`` (default),   Minimal,        "One partition, LVM",  ``password``,                       Those of Linuxfabrik
+    ``lftype=``,             Install Type,   Partitioning Scheme,     Password of User ``linuxfabrik``,   SSH Keys of User ``linuxfabrik``
+    ``cis``,                 Minimal,        "CIS, LVM",              ``password``,                       Those of Linuxfabrik
+    ``cloud``,               Minimal,        "Minimal, LVM",          unset (inject via ``cloud-init``),  none (inject via ``cloud-init``)
+    ``cloud-cis``,           Minimal,        "CIS, LVM",              unset (inject via ``cloud-init``),  none (inject via ``cloud-init``)
+    ``minimal`` (default),   Minimal,        "Minimal, LVM",          ``password``,                       Those of Linuxfabrik
 
 
 Useful Kernel Cmdline Arguments
@@ -106,7 +106,7 @@ This Python script can be modified as follows:
 Known Limitations
 -----------------
 
-This kickstart file does not work for RHEL 6- (and compatible).
+This kickstart file does not work for RHEL 7- (and compatible).
 
 
 Tests
@@ -114,25 +114,25 @@ Tests
 
 Test combinations:
 
-* OS: centos7, rocky8, rocky9
+* OS: rocky8, rocky9, rocky10
 * Firmware: BIOS, UEFI
 * Disk: vda, sda
 * ``lftype``: ``cis``, ``cloud``, ``cloud-cis``, ``minimal``
 
 What to test within the VM:
 
-* Console login using "root" + "password": Should not work.
+* Console login using "root": Should not work (account is locked, no password).
 * Console login using "linuxfabrik" + "password": Should work on non-cloud. On cloud, password depends on cloud-init.
 * ``ip a``: Should get an IP.
 * ``ssh root@vm``: Should not work.
 * ``ssh linuxfabrik@vm``: Should work on non-cloud. On cloud, it depends on cloud-init.
 * ``sudo su -``: Should work.
 * ``cat /etc/shadow``: Should show that root's password is locked.
-* ``df -hT``: One partition on non-cis, eight partitions on cis.
+* ``df -hT``: Three partitions (``/``, ``/backup``, ``/boot``) on non-cis, eight partitions on cis.
 * ``lvs``: Should work.
 * ``sudo dnf -y install nano``: Should work.
 * ``systemctl status cloud-init``: Not found on non-cloud, should work on cloud.
-* ``systemctl status firewalld``: Should work.
+* ``systemctl status firewalld``: Should be inactive on non-cloud. On cloud, firewalld is removed.
 * ``ll /root``: Should list at least two Anaconda files.
 
 
@@ -148,7 +148,6 @@ References
 ----------
 
 * `Fedora Kickstart Syntax <https://docs.fedoraproject.org/en-US/fedora/f34/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-bootloader>`_
-* `RHEL 7 Kickstart Syntax <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax>`_
 * `RHEL 8 Kickstart Syntax <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/automatically_installing_rhel/kickstart-commands-and-options-reference_rhel-installer>`_
 * `RHEL 9 Kickstart Syntax <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/automatically_installing_rhel/kickstart-commands-and-options-reference_rhel-installer>`_
 * `Rocky 8 Generic Cloud LVM Kickstart <https://git.resf.org/sig_core/kickstarts/src/branch/r8/Rocky-8-GenericCloud-LVM.ks>`_

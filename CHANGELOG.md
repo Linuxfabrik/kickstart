@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## [1.0.0] - 2026-03-10
 
 ### Added
 
@@ -14,25 +14,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `nosuid` mount option for `/home` and `/var` in CIS mode
 * Sudoers configuration prepared for Ansible use
 * One generic `lf-rhel.cfg` kickstart replacing all individual per-distro kickstart files (Fedora 35, Rocky 8, RHEL 8 and their CIS/cloud variants)
-* Support for RHEL 7, 8 and 9
-* UEFI and BIOS automatic detection for all versions except RHEL 7
+* Support for RHEL 8+, Fedora 38+ and compatible
+* UEFI and BIOS automatic detection
 * Automatic `lfdisk` detection
 * CIS hardening mode
 * Cloud variant support with cloud-init integration
 * SSH key deployment for users
+* Error handling for unknown `lftype` values
 
 ### Changed
 
 * Do not start systemd-units in chroot environment
 * Do not explicitly set network options ([#9](https://github.com/Linuxfabrik/kickstart/issues/9))
+* Drop RHEL 7 / CentOS 7 support (EOL); minimum is now RHEL 8+
+* Root account no longer has a password (previously set to "password" with account locked)
+* Sudoers entry uses user `linuxfabrik` instead of group `%linuxfabrik`
+* `rm -rf` replaced with `rm -f` for single file removals in cloud post-script
+* Use `truncate` consistently instead of `cat /dev/null >` for emptying files
 
 ### Fixed
 
 * Fix SSH user warning ([#8](https://github.com/Linuxfabrik/kickstart/issues/8))
-* Correct ownership of `authorized_keys` for RHEL 7
 * Make `grub2-mkconfig` EFI-aware
 * Add `restorecon` for `authorized_keys`
-* Use `yum` instead of `dnf` for RHEL 7 compatibility
 * Detect mount point before copying files
 * Fix `sed` error in post-install script
-* Fix `.ssh` directory permissions
+* `mkdir` without `-p` for `.ssh` directories caused failures when multiple SSH keys were deployed for the same user
+* Sudoers file permissions now set to `0440` (previously used default umask)
+* Removed `--asprimary` flag from `/boot` partition (meaningless on GPT disk label)
+* Added `--erroronfail` to `%post --nochroot` for consistent error handling
+* Fixed README inaccuracies: partition counts, root password description, firewalld status per type
