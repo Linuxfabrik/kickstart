@@ -1,5 +1,5 @@
 <h1 align="center">
-  Linuxfabrik's Generic Kickstart / Autoinstall Files
+  Linuxfabrik Kickstart
 </h1>
 <p align="center">
   Kickstart (RHEL/Fedora), Preseed (Debian), Autoinstall (Ubuntu). BIOS/UEFI, auto disk detection, four install types (minimal, CIS, cloud, cloud-CIS), locked root, LVM, SELinux enforcing.
