@@ -26,7 +26,7 @@ tbd
 * `lf-ubuntu.cfg`: Ubuntu autoinstall configuration (Ubuntu 20.04+) with LVM partitioning, matching the RHEL kickstart's minimal type
 
 
-## [1.0.0] - 2026-03-10
+## 1.0.0 - 2026-03-10
 
 ### Added
 
