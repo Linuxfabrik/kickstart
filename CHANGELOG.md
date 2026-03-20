@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+tbd
+
+
+## [1.1.1] - 2026-03-20
+
+### Fixed
+
+* Fix `cp` error preventing installs with Rocky 10 images
+
+
 ## [1.1.0] - 2026-03-10
 
 ### Added
@@ -52,3 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Removed `--asprimary` flag from `/boot` partition (meaningless on GPT disk label)
 * Added `--erroronfail` to `%post --nochroot` for consistent error handling
 * Fixed README inaccuracies: partition counts, root password description, firewalld status per type
+
+
+[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.0.0...v1.1.0
