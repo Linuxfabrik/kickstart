@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* `lf-rhel.cfg`: Add a running `LF_KICKSTART_VERSION` build stamp (format `YYYYMMDDNN`) declared at the top of `%pre`. The stamp is echoed during install (ends up in `/tmp/kickstart.install.pre.log`, `/var/log/anaconda/anaconda.log`, and the `%post` `ks-script-*.log`) and embedded as a comment at the top of the rendered `dynamic.ks`, which is archived as `/root/dynamic.ks` on the installed system. This lets admins trace any installed host back to the exact `lf-rhel.cfg` variant that built it. CONTRIBUTING documents when and how to bump the stamp; the README documents where to read it on an installed system
+
 ### Fixed
 
 * `lf-rhel.cfg`: Fix `grub2-mkconfig` being silently skipped on every target version. The `%pre` script was built via an unquoted heredoc (`cat << EOT`), which let bash eat every `"$var"` and `$(cmd)` reference embedded in the generated shell code before the Python helper was even written. As a result the grub finder always ran with empty variables and printed "Could not find a grub.cfg in /boot" — hiding the fact that `/etc/default/grub` edits had not been regenerated since the first release. The heredoc is now quoted (`cat << 'EOT'`), the finder targets `/boot/grub2/grub.cfg` directly (which is the right target on RHEL/Rocky 8/9/10 for both BIOS and UEFI — on 9+ UEFI the `/boot/efi/EFI/<vendor>/grub.cfg` is only a thin wrapper that `configfile`s `/boot/grub2/grub.cfg`), and the console-ordering change in `/etc/default/grub` is actually reflected in the generated `grub.cfg`
@@ -17,12 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* `lf-rhel.cfg`: On `lftype=cloud` and `lftype=cloud-cis`, the post-install script now also removes `/root/original-ks.cfg` in addition to `/root/anaconda-ks.cfg`. Both files are written by modern Anaconda and both contain the raw bootstrap kickstart — removing both keeps the base image clean for cloud deployments
-* README: Correct and sharpen the "Modifying this Kickstart" and "Tests" sections. The `lfkeys`, `users_<lftype>` and `post_<lftype>` descriptions now match the actual Python data structures and interpreter behavior, and the `ll /root` test is now explicit about which files to expect per `lftype`
+* README: Add a "Log Files" section to each of the RHEL, Debian and Ubuntu chapters that lists the log files most relevant for diagnosing install-time and post-install problems, grouped by "during install" and "after install", so an operator can go straight to the right log for a given symptom
+* README: Correct and sharpen the "Modifying this Kickstart" and "Tests" sections. The `lfkeys`, `users_<lftype>` and `post_<lftype>` descriptions now match the actual Python data structures and interpreter behavior, and the `ll /root` test now reflects that Anaconda's own kickstart copies (`anaconda-ks.cfg`, `original-ks.cfg`) are present on every install because they are written after all `%post` scripts and cannot be removed from within the kickstart
 
 ### Removed
 
 * `lf-rhel.cfg`: Drop the dead `yum erase authconfig` call from the cloud post-install script. `authconfig` has not existed since RHEL 8 (replaced by `authselect`), so the call was a no-op on every supported target
+* `lf-rhel.cfg`: Drop the dead `rm -f /root/anaconda-ks.cfg` and `rm -f /root/original-ks.cfg` calls from the cloud post-install script. Both files are written by Anaconda's boss module (`_writeKS_via_boss` and `CopyLogsTask`) **after** all `%post` scripts have run, so the removals ran against non-existent files and had no effect. A comment at the same spot now documents the ordering so future maintainers do not reintroduce this
 
 
 ## [1.2.0] - 2026-04-15

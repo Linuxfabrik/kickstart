@@ -147,7 +147,41 @@ What to test within the VM:
 * `sudo dnf -y install nano`: Should work.
 * `systemctl status cloud-init`: Not found on non-cloud, should work on cloud.
 * `systemctl status firewalld`: Should be inactive on non-cloud. On cloud, firewalld is removed.
-* `ll /root`: On `lftype=cis` and `lftype=minimal`, should list `anaconda-ks.cfg` and `original-ks.cfg` (both written by Anaconda), `dynamic.ks` (the rendered kickstart fragment Linuxfabrik applied) and `70-install-ssh-keys.ks` (the SSH key deployment fragment). On `lftype=cloud` and `lftype=cloud-cis`, should list only `dynamic.ks` — both of Anaconda's kickstart copies (`anaconda-ks.cfg` and `original-ks.cfg`) are removed by the cloud post-install script, and no SSH key fragment is generated because `cloud-init` handles keys.
+* `ll /root`: Should list `dynamic.ks` (the rendered kickstart fragment Linuxfabrik applied, always present). Anaconda additionally writes `original-ks.cfg` on every install and, on most targets, `anaconda-ks.cfg` — both are written after all `%post` scripts, so they are not cleaned up by this kickstart. On `lftype=cis` and `lftype=minimal`, `70-install-ssh-keys.ks` is also archived (the SSH key deployment fragment); on `lftype=cloud` and `lftype=cloud-cis`, no SSH key fragment is generated because `cloud-init` handles keys.
+* `grep 'Linuxfabrik Kickstart version' /root/dynamic.ks`: Should show the `YYYYMMDDNN` build stamp of the `lf-rhel.cfg` variant that was applied during installation. The same stamp is also written to `/var/log/anaconda/anaconda.log` and to the `%post` `ks-script-*.log` under `/var/log/anaconda/`, so the origin of any installed host is traceable to a specific `lf-rhel.cfg` build.
+
+
+### Log Files
+
+During and after an Anaconda install, the following log files are the fastest path to diagnosing problems.
+
+**During the install (installer environment, switch to a shell with `Ctrl+Alt+F2` or `Ctrl+Alt+F3`):**
+
+* `/tmp/dynamic.ks`: The dynamically generated kickstart fragment that `%pre` produced. If Anaconda reports a kickstart syntax error in an included file, `cat` this file to see what was actually rendered.
+* `/tmp/kickstart.install.pre.log`: Output of the `%pre` script, including the `LF_KICKSTART_VERSION` stamp, the `lftype`/`lfdisk` detection, and the Python helper's progress messages. First place to look if the install aborts before the package selection.
+* `/tmp/ks-script-*.log`: Per-script output of each `%post` block and each post-script under `/usr/share/anaconda/post-scripts/`. Same files that will later be copied to `/var/log/anaconda/`.
+* `/tmp/pre-script.py`: The Python helper itself. Useful if `%pre` crashes on a specific Python line.
+
+**After a successful install (on the installed system, under `/var/log/anaconda/`):**
+
+* `anaconda.log`: Main Anaconda narrative for the whole install. Start here when a post-install symptom shows up after first boot.
+* `dbus.log`: Anaconda DBus module communication. Only needed for deeper Anaconda-internal issues (for example when the `boss` or `storage` module misbehaves, as with the `original-ks.cfg` write ordering).
+* `journal.log`: Snapshot of the installer's journal at the end of install. Covers kernel, dracut and systemd messages; useful when the installer itself had boot problems.
+* `ks-script-*.log`: Output of each `%post` block. `grep -l 'Linuxfabrik Kickstart version' /var/log/anaconda/ks-script-*.log` identifies the script that ran our `post_cloud`/`post_cis` block; that file contains the yum/dnf transaction output, the systemd-in-chroot warnings, the `grub2-mkconfig` result, and any messages from our cleanup/tweaks.
+* `packaging.log`: DNF/yum transaction detail during the install. Goes deeper than `ks-script-*.log` when a package install or removal looks wrong.
+* `program.log`: External programs Anaconda invoked (e.g. `grub2-mkconfig`, `mkfs.xfs`). Complements the other logs when the failing step was an external binary.
+* `storage.log`: Partitioning, LVM creation, filesystem formatting. First stop for "disk not found", `ignoredisk` or LVM-related failures.
+
+**On the installed system, outside `/var/log/anaconda/`:**
+
+* `/root/anaconda-ks.cfg`: Anaconda's generated copy of the effective kickstart. Not present on targets where `can_save_output_kickstart=False` (including Rocky 10 cloud).
+* `/root/dynamic.ks`: The kickstart fragment Linuxfabrik archived on the installed system. The first comment line reads `# Linuxfabrik Kickstart version: YYYYMMDDNN`, which attributes the host to a specific `lf-rhel.cfg` build.
+* `/root/original-ks.cfg`: Anaconda's verbatim copy of the `lf-rhel.cfg` served from the `inst.ks=` URL.
+
+**For `cloud-init` problems on `lftype=cloud` and `lftype=cloud-cis` (after first boot):**
+
+* `/var/log/cloud-init-output.log`: Stdout/stderr of any user-data scripts that cloud-init executed.
+* `/var/log/cloud-init.log`: Full cloud-init log with DEBUG-level entries. First stop for "my SSH keys aren't there" or "hostname not set".
 
 
 ### Troubleshooting
@@ -217,6 +251,26 @@ What to test within the VM:
 * `sudo apt install -y nano`: Should work.
 
 
+### Log Files
+
+During and after a Debian Installer (d-i) preseed run, the following log files are the fastest path to diagnosing problems.
+
+**During the install (switch to a shell with `Ctrl+Alt+F2`; live installer syslog tails on `Ctrl+Alt+F4`):**
+
+* `/var/log/partman`: Partition manager log. First stop for disk, LVM or filesystem errors during install.
+* `/var/log/syslog`: Main installer syslog. First stop for any preseed or d-i failure.
+
+**After a successful install (on the installed system, under `/var/log/installer/`):**
+
+* `cdebconf/questions.dat`: Preseed questions and the answers that were given (by our preseed file or interactively). Useful to verify that a preseed directive actually reached debconf.
+* `cdebconf/templates.dat`: The debconf template catalogue, in case a preseed key was silently ignored because the template changed.
+* `hardware-summary`: Detected hardware and driver decisions.
+* `lsb-release`, `media-info`: Base distribution and installation media metadata.
+* `partman`: Partition manager log, persisted from the install.
+* `status`: `apt`/`dpkg` status of every package installed during the install phase.
+* `syslog`: Main installer narrative for the whole install.
+
+
 ### References
 
 * [Debian Preseed Documentation](https://www.debian.org/releases/stable/amd64/apb.en.html)
@@ -272,6 +326,24 @@ What to test within the VM:
 * `df -hT`: Three partitions (`/`, `/backup`, `/boot`).
 * `lvs`: Should work.
 * `sudo apt install -y nano`: Should work.
+
+
+### Log Files
+
+During and after a subiquity autoinstall run, the following log files are the fastest path to diagnosing problems.
+
+**During the install (switch to a shell with `Ctrl+Alt+F2`):**
+
+* `/var/log/installer/autoinstall-user-data`: The autoinstall YAML subiquity actually consumed. Useful to verify that the `user-data` file served over HTTP is what subiquity actually parsed.
+* `/var/log/installer/subiquity-server-debug.log`: Subiquity server-side debug log, streams live during install. First stop for any autoinstall/subiquity failure.
+
+**After a successful install (on the installed system, under `/var/log/installer/`):**
+
+* `autoinstall-user-data`: The autoinstall YAML subiquity consumed, persisted.
+* `cloud-init-output.log`, `cloud-init.log`: Cloud-init logs from inside the installer — subiquity uses cloud-init internally to fetch `user-data` and apply some steps.
+* `curtin-install-cfg.yaml`, `curtin-install.log`: Curtin (the actual installer under subiquity) effective config and run log. First stop for partitioning, LVM or grub issues.
+* `installer-journal.txt`: Journal snapshot from the installer environment.
+* `subiquity-client-debug.log`, `subiquity-server-debug.log`: Subiquity's full debug logs.
 
 
 ### References

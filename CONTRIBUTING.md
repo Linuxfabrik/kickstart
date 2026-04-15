@@ -71,6 +71,20 @@ Python packages installed via `pip` inside workflows follow a two-tier policy:
 - One-shot installs such as `ansible-builder`, `build`, `mkdocs`, `pdoc`, and `ruff` in release, docs, or test workflows are version-pinned only (`package==X.Y.Z`) and kept fresh by Dependabot. Scorecard's `pipCommand not pinned by hash` findings for these are considered acceptable risk and may be dismissed.
 
 
+### Versioning the Kickstart File
+
+`lf-rhel.cfg` carries a running build stamp in the shell variable `LF_KICKSTART_VERSION` at the top of the `%pre` section. The value is logged at install time (to `/tmp/kickstart.install.pre.log`, the Anaconda logs, and the `%post` `ks-script-*.log`) and embedded as a comment in the `dynamic.ks` archived under `/root/dynamic.ks` on the installed system, so the origin of any installed host can be traced back to a specific build.
+
+The format is `YYYYMMDDNN`, where `YYYYMMDD` is the build date and `NN` is a two-digit daily sequence number starting at `01`. Example: `2026041501` for the first build on 2026-04-15, `2026041502` for the second on the same day.
+
+Rules:
+
+- Bump `LF_KICKSTART_VERSION` in every commit that changes the effective content of `lf-rhel.cfg` (kickstart logic, embedded shell/Python, comments that end up in the generated output).
+- Pure documentation commits (`README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`) and commits that only touch `lf-debian.cfg` or `lf-ubuntu.cfg` do not bump the RHEL kickstart version.
+- If multiple commits on the same day change `lf-rhel.cfg`, increment `NN` accordingly.
+- Releases (as described in the `Changelog` section) also imply a version bump, because they are also content changes.
+
+
 ### Coding Conventions
 
 - Sort variables, parameters, lists, and similar items alphabetically where possible.
