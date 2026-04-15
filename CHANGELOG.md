@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+tbd
+
+
+## [1.2.0] - 2026-04-15
+
 ### Added
 
 * Add CONTRIBUTING
@@ -77,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed README inaccuracies: partition counts, root password description, firewalld status per type
 
 
-[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.0.0...v1.1.0
