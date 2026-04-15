@@ -73,15 +73,23 @@ Python packages installed via `pip` inside workflows follow a two-tier policy:
 
 ### Versioning the Kickstart File
 
-`lf-rhel.cfg` carries a running build stamp in the shell variable `LF_KICKSTART_VERSION` at the top of the `%pre` section. The value is logged at install time (to `/tmp/kickstart.install.pre.log`, the Anaconda logs, and the `%post` `ks-script-*.log`) and embedded as a comment in the `dynamic.ks` archived under `/root/dynamic.ks` on the installed system, so the origin of any installed host can be traced back to a specific build.
+All three installer config files (`lf-rhel.cfg`, `lf-debian.cfg`, `lf-ubuntu.cfg`) carry a shared running build stamp under the name `LF_KICKSTART_VERSION`. The same stamp value applies to all three files at any given time — it is a repo-wide build marker, not a per-file version.
 
 The format is `YYYYMMDDNN`, where `YYYYMMDD` is the build date and `NN` is a two-digit daily sequence number starting at `01`. Example: `2026041501` for the first build on 2026-04-15, `2026041502` for the second on the same day.
 
+On every supported target, the stamp lands in two places: the installer-time logs and the file `/root/lf-install-version` on the installed system. The installer-time logs differ by target:
+
+- `lf-rhel.cfg`: exported as a shell variable in `%pre`, echoed into `/tmp/kickstart.install.pre.log`, re-echoed by the generated `%post` (so it shows up in `/var/log/anaconda/ks-script-*.log`), and embedded as a comment in `/root/dynamic.ks`.
+- `lf-debian.cfg`: logged via `logger(1)` in `d-i preseed/early_command`, which lands in `/var/log/syslog` during install and later in `/var/log/installer/syslog`.
+- `lf-ubuntu.cfg`: logged via `logger(1)` in `early-commands`, which lands in the live installer journal and later in `/var/log/installer/installer-journal.txt`.
+
+The stamp appears as a literal in multiple places within each of the three files (header comment, early/late commands, and for `lf-rhel.cfg` the `%pre` shell variable). All occurrences must be kept in lockstep when bumping — `grep -n LF_KICKSTART_VERSION lf-*.cfg` is a quick way to find them.
+
 Rules:
 
-- Bump `LF_KICKSTART_VERSION` in every commit that changes the effective content of `lf-rhel.cfg` (kickstart logic, embedded shell/Python, comments that end up in the generated output).
-- Pure documentation commits (`README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`) and commits that only touch `lf-debian.cfg` or `lf-ubuntu.cfg` do not bump the RHEL kickstart version.
-- If multiple commits on the same day change `lf-rhel.cfg`, increment `NN` accordingly.
+- Bump `LF_KICKSTART_VERSION` in every commit that changes the effective content of `lf-rhel.cfg`, `lf-debian.cfg` or `lf-ubuntu.cfg` (kickstart/preseed/autoinstall logic, embedded shell/Python, comments that end up in the generated output).
+- Pure documentation commits (`README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`) do not bump the version.
+- If multiple content-changing commits happen on the same day, increment `NN` accordingly.
 - Releases (as described in the `Changelog` section) also imply a version bump, because they are also content changes.
 
 

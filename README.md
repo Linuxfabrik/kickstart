@@ -176,6 +176,7 @@ During and after an Anaconda install, the following log files are the fastest pa
 
 * `/root/anaconda-ks.cfg`: Anaconda's generated copy of the effective kickstart. Not present on targets where `can_save_output_kickstart=False` (including Rocky 10 cloud).
 * `/root/dynamic.ks`: The kickstart fragment Linuxfabrik archived on the installed system. The first comment line reads `# Linuxfabrik Kickstart version: YYYYMMDDNN`, which attributes the host to a specific `lf-rhel.cfg` build.
+* `/root/lf-install-version`: Distro-independent fleet marker file containing just the `YYYYMMDDNN` build stamp. Same value for equivalent files on Debian and Ubuntu hosts, making `cat /root/lf-install-version` a uniform cross-distro identification across the fleet.
 * `/root/original-ks.cfg`: Anaconda's verbatim copy of the `lf-rhel.cfg` served from the `inst.ks=` URL.
 
 **For `cloud-init` problems on `lftype=cloud` and `lftype=cloud-cis` (after first boot):**
@@ -268,7 +269,11 @@ During and after a Debian Installer (d-i) preseed run, the following log files a
 * `lsb-release`, `media-info`: Base distribution and installation media metadata.
 * `partman`: Partition manager log, persisted from the install.
 * `status`: `apt`/`dpkg` status of every package installed during the install phase.
-* `syslog`: Main installer narrative for the whole install.
+* `syslog`: Main installer narrative for the whole install. `grep 'Linuxfabrik Kickstart version' /var/log/installer/syslog` surfaces the `YYYYMMDDNN` build stamp logged by the preseed `early_command`.
+
+**On the installed system, outside `/var/log/installer/`:**
+
+* `/root/lf-install-version`: Distro-independent fleet marker file containing just the `YYYYMMDDNN` build stamp of the `lf-debian.cfg` variant that was applied during installation. Same value for equivalent files on RHEL and Ubuntu hosts, making `cat /root/lf-install-version` a uniform cross-distro identification across the fleet.
 
 
 ### References
@@ -342,8 +347,12 @@ During and after a subiquity autoinstall run, the following log files are the fa
 * `autoinstall-user-data`: The autoinstall YAML subiquity consumed, persisted.
 * `cloud-init-output.log`, `cloud-init.log`: Cloud-init logs from inside the installer — subiquity uses cloud-init internally to fetch `user-data` and apply some steps.
 * `curtin-install-cfg.yaml`, `curtin-install.log`: Curtin (the actual installer under subiquity) effective config and run log. First stop for partitioning, LVM or grub issues.
-* `installer-journal.txt`: Journal snapshot from the installer environment.
+* `installer-journal.txt`: Journal snapshot from the installer environment. `grep 'Linuxfabrik Kickstart version' /var/log/installer/installer-journal.txt` surfaces the `YYYYMMDDNN` build stamp logged by the autoinstall `early-commands`.
 * `subiquity-client-debug.log`, `subiquity-server-debug.log`: Subiquity's full debug logs.
+
+**On the installed system, outside `/var/log/installer/`:**
+
+* `/root/lf-install-version`: Distro-independent fleet marker file containing just the `YYYYMMDDNN` build stamp of the `lf-ubuntu.cfg` variant that was applied during installation. Same value for equivalent files on RHEL and Debian hosts, making `cat /root/lf-install-version` a uniform cross-distro identification across the fleet.
 
 
 ### References
