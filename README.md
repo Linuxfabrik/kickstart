@@ -112,11 +112,11 @@ At the beginning of the pre-script the available Python version is determined, t
 The Python script then generates the `/tmp/dynamic.ks`.
 This Python script can be modified as follows:
 
-* `lfkeys`: An array of SSH keys that will be installed for either the `root` or `linuxfabrik` user depending on `lftype` as documented above.
+* `lfkeys`: An array of SSH public keys that will be authorized for the `linuxfabrik` user on `lftype=cis` and `lftype=minimal`. On `lftype=cloud` and `lftype=cloud-cis` no keys are deployed at install time, because `cloud-init` handles SSH key injection there. The `root` account never receives SSH keys regardless of `lftype`.
 * `packages_<lftype>`: An array with package names for a `<lftype>` install.
 * `part_<lftype>`: An array of kickstart `logvol` lines that define logical volumes for `<lftype>` as documented in Fedora Kickstart Syntax Reference: [logvol](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-logvol)
-* `users_<lftype>`: A string containing a ":" separated list in the form `name="<username>":cmd="<kickstart command used for user creation>":keys="<array of ssh-keys to add>"` (Fedora Kickstart Syntax Reference: [user](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-user), [rootpw](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-rootpw))
-* `post_<lftype>`: A multiline string containing the postscript for `<lftype>`. Will be executed by `/bin/sh`.
+* `users_<lftype>`: A Python list of dicts, one entry per user, with the keys `name` (the username), `cmd` (the kickstart command used to create the user, e.g. `user --name=linuxfabrik --groups=wheel --password=password --plaintext` or `rootpw --lock`) and `keys` (a list of SSH public keys to authorize for that user). See Fedora Kickstart Syntax Reference: [user](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-user), [rootpw](https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Kickstart_Syntax_Reference/#sect-kickstart-commands-rootpw).
+* `post_<lftype>`: A multiline string containing the chrooted post-install script for `<lftype>`. Anaconda executes it with `/bin/sh`, which on every supported target (RHEL/Rocky 8/9/10, Fedora 38+) is bash invoked in sh-compat mode, so bash features like globs inside `[ -f "$var" ]` loops work as expected.
 
 
 ### Known Limitations
@@ -147,7 +147,7 @@ What to test within the VM:
 * `sudo dnf -y install nano`: Should work.
 * `systemctl status cloud-init`: Not found on non-cloud, should work on cloud.
 * `systemctl status firewalld`: Should be inactive on non-cloud. On cloud, firewalld is removed.
-* `ll /root`: Should list at least two Anaconda files.
+* `ll /root`: On `lftype=cis` and `lftype=minimal`, should list `anaconda-ks.cfg` and `original-ks.cfg` (both written by Anaconda), `dynamic.ks` (the rendered kickstart fragment Linuxfabrik applied) and `70-install-ssh-keys.ks` (the SSH key deployment fragment). On `lftype=cloud` and `lftype=cloud-cis`, should list only `dynamic.ks` — both of Anaconda's kickstart copies (`anaconda-ks.cfg` and `original-ks.cfg`) are removed by the cloud post-install script, and no SSH key fragment is generated because `cloud-init` handles keys.
 
 
 ### Troubleshooting
