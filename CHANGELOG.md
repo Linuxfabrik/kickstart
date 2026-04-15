@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* `lf-rhel.cfg`: Fix `cp` error during the post-install phase on RHEL 10 / Rocky 10 cloud installs. The script no longer parses `/proc/mounts` to locate the installed system's root; it uses Anaconda's canonical `/mnt/sysroot` mount point (with a fallback to the legacy `/mnt/sysimage`), so the same kickstart works on RHEL/Rocky 8, 9 and 10
+* `lf-rhel.cfg`: Fix post-install failure on RHEL 10 / Rocky 10 cloud installs. The previous `%post --nochroot` block copied `dynamic.ks` and `70-install-ssh-keys.ks` into `/root` of the installed system for auditing and kept breaking across Anaconda versions (first `/proc/mounts` parsing, then mount-point layout). The archival is now performed by a chrooted `%post` hook generated in `%pre` under `/usr/share/anaconda/post-scripts/`, with the content embedded via base64-decoded heredoc. The same kickstart now works on RHEL/Rocky 8, 9 and 10
 
 
 ## [1.2.0] - 2026-04-15
