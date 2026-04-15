@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-tbd
+### Changed
+
+* README: Cross-check the Feature, Tests and Install-Type sections for each of the three distros against the actual cfg-file behavior, and correct five discrepancies. The "What this ... does" summaries now mention the `LF_KICKSTART_VERSION` build stamp and the `/root/lf-install-version` fleet marker for all three distros. The RHEL `df -hT` test reflects the real mount counts (3 or 4 on non-CIS depending on BIOS/UEFI, 9 or 10 on CIS) instead of the previous off-by-one numbers. The RHEL `ll /root`/`grep` test no longer claims that the stamp lands in `/var/log/anaconda/anaconda.log` (it actually only lands in the `%post` `ks-script-*.log`). The `lftype` table now lists the `linuxfabrik` password as "locked (SSH key login via `cloud-init`)" for the cloud variants instead of the misleading "unset". A `//boot` typo in the Ubuntu section is fixed
 
 
 ## [1.2.1] - 2026-04-15

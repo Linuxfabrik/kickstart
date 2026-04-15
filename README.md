@@ -74,17 +74,18 @@ For convenience, we provide https://linuxfabrik.ch/ks as a shortened URL to http
 
 * Supports RHEL 8+, Fedora 38+ and compatible.
 * Works on legacy BIOS as well as UEFI.
-* The kickstart file is intended to provide a minimal installation, with `firewalld` disabled and SELinux in "Enforcing" mode.
+* The kickstart file is intended to provide a minimal installation, with `firewalld` disabled (and removed entirely on cloud variants) and SELinux in "Enforcing" mode.
 * Can be installed on a user-defined disk by specifying the kernel cmdline argument `lfdisk=$DISK`. If unset, it tries to find the first block device, in the order `vda` > `sda` > `nvme0n1`, and fails otherwise.
 * There are two users: `linuxfabrik` and `root`. The root account is always locked and has no password or SSH keys. Login with the `linuxfabrik` user, which is also part of the `wheel` group. `sudo` is configured to gain root.
+* Every install carries a `LF_KICKSTART_VERSION` build stamp (format `YYYYMMDDNN`) that is logged at install time and written to `/root/lf-install-version` on the installed system, so any host can be traced back to the exact `lf-rhel.cfg` build that produced it. See "Log Files" below for where to read the stamp. The same marker file and naming is used on Debian and Ubuntu hosts for uniform fleet identification across distros.
 
 The kickstart file can be used to install different types of minimal installs by setting the kernel cmdline argument `lftype=`:
 
 | `lftype=` | Install Type | Partitioning Scheme | Password of User `linuxfabrik` | SSH Keys of User `linuxfabrik` |
 |---|---|---|---|---|
 | `cis` | Minimal | CIS, LVM | `password` | Those of Linuxfabrik |
-| `cloud` | Minimal | Minimal, LVM | unset (inject via `cloud-init`) | none (inject via `cloud-init`) |
-| `cloud-cis` | Minimal | CIS, LVM | unset (inject via `cloud-init`) | none (inject via `cloud-init`) |
+| `cloud` | Minimal | Minimal, LVM | locked (SSH key login via `cloud-init`) | none at install time (injected by `cloud-init`) |
+| `cloud-cis` | Minimal | CIS, LVM | locked (SSH key login via `cloud-init`) | none at install time (injected by `cloud-init`) |
 | `minimal` (default) | Minimal | Minimal, LVM | `password` | Those of Linuxfabrik |
 
 
@@ -142,13 +143,13 @@ What to test within the VM:
 * `ssh linuxfabrik@vm`: Should work on non-cloud. On cloud, it depends on cloud-init.
 * `sudo su -`: Should work.
 * `cat /etc/shadow`: Should show that root's password is locked.
-* `df -hT`: Three partitions (`/`, `/backup`, `/boot`) on non-cis, eight partitions on cis.
+* `df -hT`: On `lftype=cloud` and `lftype=minimal`, four mounts on UEFI (`/`, `/backup`, `/boot`, `/boot/efi`) and three on BIOS (no `/boot/efi`). On `lftype=cis` and `lftype=cloud-cis`, ten mounts on UEFI (`/`, `/backup`, `/boot`, `/boot/efi`, `/home`, `/tmp`, `/var`, `/var/log`, `/var/log/audit`, `/var/tmp`) and nine on BIOS. Swap is not listed by `df`.
 * `lvs`: Should work.
 * `sudo dnf -y install nano`: Should work.
 * `systemctl status cloud-init`: Not found on non-cloud, should work on cloud.
 * `systemctl status firewalld`: Should be inactive on non-cloud. On cloud, firewalld is removed.
-* `ll /root`: Should list `dynamic.ks` (the rendered kickstart fragment Linuxfabrik applied, always present). Anaconda additionally writes `original-ks.cfg` on every install and, on most targets, `anaconda-ks.cfg` — both are written after all `%post` scripts, so they are not cleaned up by this kickstart. On `lftype=cis` and `lftype=minimal`, `70-install-ssh-keys.ks` is also archived (the SSH key deployment fragment); on `lftype=cloud` and `lftype=cloud-cis`, no SSH key fragment is generated because `cloud-init` handles keys.
-* `grep 'Linuxfabrik Kickstart version' /root/dynamic.ks`: Should show the `YYYYMMDDNN` build stamp of the `lf-rhel.cfg` variant that was applied during installation. The same stamp is also written to `/var/log/anaconda/anaconda.log` and to the `%post` `ks-script-*.log` under `/var/log/anaconda/`, so the origin of any installed host is traceable to a specific `lf-rhel.cfg` build.
+* `ll /root`: Should list `dynamic.ks` (the rendered kickstart fragment Linuxfabrik applied, always present) and `lf-install-version` (the build stamp marker). Anaconda additionally writes `original-ks.cfg` on every install and, on most targets, `anaconda-ks.cfg` — both are written after all `%post` scripts, so they are not cleaned up by this kickstart. On `lftype=cis` and `lftype=minimal`, `70-install-ssh-keys.ks` is also archived (the SSH key deployment fragment); on `lftype=cloud` and `lftype=cloud-cis`, no SSH key fragment is generated because `cloud-init` handles keys.
+* `cat /root/lf-install-version` or `grep 'Linuxfabrik Kickstart version' /root/dynamic.ks`: Both should show the `YYYYMMDDNN` build stamp of the `lf-rhel.cfg` variant that was applied during installation. The same stamp is also present in the `%post` `ks-script-*.log` under `/var/log/anaconda/` (the first line of the script that ran the `post_cloud`/`post_cis` block), so the origin of any installed host is traceable to a specific `lf-rhel.cfg` build both on disk and in the installer logs.
 
 
 ### Log Files
@@ -229,6 +230,7 @@ boot: auto url=http://<server>/<path>/lf-debian.cfg
 * There are two users: `linuxfabrik` and `root`. The root account is not created (disabled). Login with the `linuxfabrik` user, which has password-less sudo. The default password is `password` (change after first login).
 * SSH server is installed and Linuxfabrik SSH keys are deployed.
 * The system shuts down after installation.
+* Every install carries a `LF_KICKSTART_VERSION` build stamp (format `YYYYMMDDNN`) that is logged at install time via `logger(1)` in `preseed/early_command` and written to `/root/lf-install-version` on the installed system, so any host can be traced back to the exact `lf-debian.cfg` build that produced it. See "Log Files" below for where to read the stamp. The same marker file and naming is used on RHEL and Ubuntu hosts for uniform fleet identification across distros.
 
 
 ### Tests
@@ -305,11 +307,12 @@ autoinstall ds=nocloud-net;s=http://<server>/<path>/
 
 * Supports Ubuntu 20.04+ (subiquity installer).
 * Targets UEFI systems (see comments in the file for BIOS adaptation).
-* Provides a minimal server installation with LVM partitioning (`/`, `/backup`, `//boot`, swap).
+* Provides a minimal server installation with LVM partitioning (`/`, `/backup`, `/boot`, swap).
 * There are two users: `linuxfabrik` and `root`. The root account is locked with no password. Login with the `linuxfabrik` user, which has password-less sudo. The default password is `password` (change after first login).
 * SSH server is installed and Linuxfabrik SSH keys are deployed.
 * `ufw` and `kdump` are disabled.
 * The system shuts down after installation.
+* Every install carries a `LF_KICKSTART_VERSION` build stamp (format `YYYYMMDDNN`) that is logged at install time via `logger(1)` in `autoinstall early-commands` and written to `/root/lf-install-version` on the installed system, so any host can be traced back to the exact `lf-ubuntu.cfg` build that produced it. See "Log Files" below for where to read the stamp. The same marker file and naming is used on RHEL and Debian hosts for uniform fleet identification across distros.
 
 
 ### Tests
