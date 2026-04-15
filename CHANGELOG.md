@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add CONTRIBUTING
 * Add pre-commit hooks
 
+### Removed
+
+* `lf-rhel.cfg`: Drop the `dhcp-client` package and the `/etc/dhcp/dhclient.conf` retry/timeout tweak from the cloud variant. Since RHEL 8, NetworkManager uses its internal DHCP client by default and does not consult `dhclient.conf`, so the workaround (originally from CentOS Bug Tracker #6866, 2013) had been a no-op. RHEL 10 removed the `dhcp-client` package upstream entirely, so this also unblocks RHEL 10 cloud installs.
+
 ### Security
 
 * Harden the CI supply chain: the `pre-commit` install in the pre-commit-autoupdate workflow is now hash-pinned via `.github/pre-commit/requirements.txt` (generated with `pip-compile --generate-hashes --strip-extras`), and `dependabot/fetch-metadata` is pinned to a commit SHA so all GitHub Actions used in `.github/workflows/` are now pinned by hash. The policy is documented in CONTRIBUTING.md under "CI Supply Chain"
