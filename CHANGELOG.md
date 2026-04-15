@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-tbd
+### Fixed
+
+* `lf-rhel.cfg`: Fix `cp` error during the post-install phase on RHEL 10 / Rocky 10 cloud installs. The script no longer parses `/proc/mounts` to locate the installed system's root; it uses Anaconda's canonical `/mnt/sysroot` mount point (with a fallback to the legacy `/mnt/sysimage`), so the same kickstart works on RHEL/Rocky 8, 9 and 10
 
 
 ## [1.2.0] - 2026-04-15
