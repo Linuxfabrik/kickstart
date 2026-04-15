@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+tbd
+
+
+## [1.2.1] - 2026-04-15
+
 ### Added
 
 * Add a running `LF_KICKSTART_VERSION` build stamp (format `YYYYMMDDNN`) shared across `lf-rhel.cfg`, `lf-debian.cfg` and `lf-ubuntu.cfg`. The stamp is logged at install time (to `/tmp/kickstart.install.pre.log` and `/var/log/anaconda/ks-script-*.log` on RHEL, to `/var/log/installer/syslog` on Debian, and to `/var/log/installer/installer-journal.txt` on Ubuntu) and written to `/root/lf-install-version` on every installed host — a single distro-independent fleet marker that lets admins trace any installed host back to the exact installer build that produced it. On RHEL the stamp is additionally embedded as a comment at the top of the rendered `dynamic.ks` (archived as `/root/dynamic.ks`). CONTRIBUTING documents when and how to bump the stamp; the README documents where to read it on an installed system
@@ -102,7 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed README inaccuracies: partition counts, root password description, firewalld status per type
 
 
-[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.0.0...v1.1.0
