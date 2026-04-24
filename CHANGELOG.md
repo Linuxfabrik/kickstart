@@ -8,8 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+tbd
+
+
+## [1.2.2] - 2026-04-24
+
+### Added
+
+* `lf-rhel.cfg`: Add SSH keys for ali.bhatti, eric.buerki and jihan.el-karz to the `lfkeys` list ([#28](https://github.com/Linuxfabrik/kickstart/pull/28))
+
 ### Changed
 
+* Bump `LF_KICKSTART_VERSION` to `2026042401` and re-align all three cfg files to the same stamp (previously `lf-rhel.cfg` was at `2026041503` while `lf-debian.cfg` and `lf-ubuntu.cfg` were at `2026041502`)
 * README: Cross-check the Feature, Tests and Install-Type sections for each of the three distros against the actual cfg-file behavior, and correct five discrepancies. The "What this ... does" summaries now mention the `LF_KICKSTART_VERSION` build stamp and the `/root/lf-install-version` fleet marker for all three distros. The RHEL `df -hT` test reflects the real mount counts (3 or 4 on non-CIS depending on BIOS/UEFI, 9 or 10 on CIS) instead of the previous off-by-one numbers. The RHEL `ll /root`/`grep` test no longer claims that the stamp lands in `/var/log/anaconda/anaconda.log` (it actually only lands in the `%post` `ks-script-*.log`). The `lftype` table now lists the `linuxfabrik` password as "locked (SSH key login via `cloud-init`)" for the cloud variants instead of the misleading "unset". A `//boot` typo in the Ubuntu section is fixed
 
 
@@ -109,7 +119,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed README inaccuracies: partition counts, root password description, firewalld status per type
 
 
-[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.0...v1.1.1
