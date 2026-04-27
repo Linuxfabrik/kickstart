@@ -8,7 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-tbd
+### Added
+
+* `lf-rhel.cfg`: Add the `nftables` package to the base package list so it is available on all `lftype` variants (`cis`, `cloud`, `cloud-cis`, `minimal`) for the admin to configure firewalling after installation
+
+### Changed
+
+* `lf-rhel.cfg`: Bump `LF_KICKSTART_VERSION` to `2026042701`
 
 
 ## [1.2.2] - 2026-04-24
