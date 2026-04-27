@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * `lf-rhel.cfg`: Bump `LF_KICKSTART_VERSION` to `2026042701`
+* CONTRIBUTING: Switch `LF_KICKSTART_VERSION` from a repo-wide stamp to a per-file stamp. Only the cfg file whose effective content changes needs to be bumped; the three values may legitimately diverge over time. The previous repo-wide policy forced unrelated files to be touched on every commit, polluting `git blame` and `/root/lf-install-version` on Debian/Ubuntu hosts with builds that did not actually change anything for them
 
 
 ## [1.2.2] - 2026-04-24
