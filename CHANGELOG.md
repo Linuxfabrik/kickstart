@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+tbd
+
+
+## [1.3.0] - 2026-04-27
+
 ### Added
 
 * `lf-rhel.cfg`: Add the `nftables` package to the base package list so it is available on all `lftype` variants (`cis`, `cloud`, `cloud-cis`, `minimal`) for the admin to configure firewalling after installation
@@ -126,7 +131,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed README inaccuracies: partition counts, root password description, firewalld status per type
 
 
-[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.1...v1.2.0
