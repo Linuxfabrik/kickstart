@@ -188,8 +188,9 @@ During and after an Anaconda install, the following log files are the fastest pa
 
 ### Troubleshooting
 
-* `page_poison=1` kernel cmdline option installed by bootloader cmd can leave the system unbootable due to a buggy UEFI firmware. This was observed with TianoCore firmware on qemu. Remove this option to boot. See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/8.7_release_notes/known-issues.
 * Fedora 38: We observed problems booting into the installer. Try `inst.neednet=1 rd.debug` to get to the installer.
+* `page_poison=1` kernel cmdline option installed by bootloader cmd can leave the system unbootable due to a buggy UEFI firmware. This was observed with TianoCore firmware on qemu. Remove this option to boot. See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/8.7_release_notes/known-issues.
+* SSH public-key authentication keeps falling back to password on a freshly installed host: the system is most likely running in FIPS mode. Starting with Rocky 9.7 the ISO boot menu carries an `Install Rocky Linux 9 in FIPS Mode` entry and the menu order has changed, so it is easy to land on it by accident when navigating with the arrow keys before pressing `e`. FIPS rejects ED25519 (and other non-FIPS) keys, so sshd silently skips the offered key and falls back to password authentication. Verify on the installed host with `fips-mode-setup --check` or `cat /proc/sys/crypto/fips_enabled`. Recover by reinstalling from the standard `Install Rocky Linux 9` entry, or by running `fips-mode-setup --disable` followed by a reboot.
 * Last resort: If this Kickstart file doesn't work, copy it to a webserver and modify it to suit your needs.
 
 
