@@ -9,6 +9,7 @@
 <div align="center">
 
 ![GitHub Stars](https://img.shields.io/github/stars/linuxfabrik/kickstart)
+[![Star History Chart](https://api.star-history.com/svg?repos=Linuxfabrik/kickstart&type=Date)](https://star-history.com/#Linuxfabrik/kickstart&Date)
 ![License](https://img.shields.io/github/license/linuxfabrik/kickstart)
 ![Version](https://img.shields.io/github/v/release/linuxfabrik/kickstart?sort=semver)
 ![Platforms](https://img.shields.io/badge/Platforms-RHEL%20%7C%20Fedora%20%7C%20Debian%20%7C%20Ubuntu-informational)
@@ -27,6 +28,8 @@ This repository provides automated installation configurations for:
 * **RHEL 8+, Fedora 38+ and compatible** (`lf-rhel.cfg`, Kickstart format)
 * **Debian 11+** (`lf-debian.cfg`, Preseed format)
 * **Ubuntu 20.04+** (`lf-ubuntu.cfg`, Autoinstall format)
+
+> If these Kickstart, Preseed and Autoinstall files help you provisioning your RHEL, Fedora, Debian or Ubuntu fleet, please give it a star.
 
 
 ## RHEL, Fedora and compatible
