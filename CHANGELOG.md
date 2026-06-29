@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+tbd
+
+
+## [1.3.1] - 2026-06-29
+
+### Changed
+
+* `lf-rhel.cfg`: Bump `LF_KICKSTART_VERSION` to `2026062901`
+
+### Removed
+
+* `lf-rhel.cfg`: Remove the SSH key for jihan.el-karz from the `lfkeys` list
+
 ### Security
 
 * **ci**: Scope `GITHUB_TOKEN` permissions in the dependabot-auto-merge workflow to the job level, with top-level now `read-all`. Matches the pattern used by the other Linuxfabrik workflows and addresses the OpenSSF Scorecard `Token-Permissions` finding.
@@ -133,7 +146,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed README inaccuracies: partition counts, root password description, firewalld status per type
 
 
-[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.0...v1.2.1
