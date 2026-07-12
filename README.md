@@ -9,7 +9,7 @@
 <div align="center">
 
 ![GitHub Stars](https://img.shields.io/github/stars/linuxfabrik/kickstart)
-[![Star History Chart](https://api.star-history.com/svg?repos=Linuxfabrik/kickstart&type=Date)](https://star-history.com/#Linuxfabrik/kickstart&Date)
+[![Star History Chart](https://api.star-history.com/chart?repos=Linuxfabrik/kickstart&type=date&legend=top-left&sealed_token=6SUm1801mnVVflh1FjdwjwI1jTKV5frTQxeT9BI5GQvcCSalOiWVA9ZX6pLrUmxtmvs1v6KGVThzjW1gGciZf7jpiQbS4713HMIMiGkG-9v7I5GQhnnPIw)](https://www.star-history.com/?repos=Linuxfabrik%2Fkickstart&type=date&legend=top-left)
 ![License](https://img.shields.io/github/license/linuxfabrik/kickstart)
 ![Version](https://img.shields.io/github/v/release/linuxfabrik/kickstart?sort=semver)
 ![Platforms](https://img.shields.io/badge/Platforms-RHEL%20%7C%20Fedora%20%7C%20Debian%20%7C%20Ubuntu-informational)
