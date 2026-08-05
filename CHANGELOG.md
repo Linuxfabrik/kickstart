@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 tbd
 
 
+## [1.3.2] - 2026-08-05
+
+### Changed
+
+* **ci**: Bump the pinned GitHub Actions and the pre-commit tooling to their current releases
+* **ci**: Dependabot now proposes all GitHub Actions updates in a single pull request instead of one per action
+* **ci**: Dependency pull requests are merged more reliably, and pull requests touching a lockfile that is deliberately pinned to an older Python are left open for a human instead of being merged blindly
+
+No changes to the kickstart files themselves, so the `LF_KICKSTART_VERSION` build stamps stay untouched and installed hosts are unaffected.
+
+
 ## [1.3.1] - 2026-06-29
 
 ### Changed
@@ -146,7 +157,8 @@ tbd
 * Fixed README inaccuracies: partition counts, root password description, firewalld status per type
 
 
-[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.1...v1.2.2
