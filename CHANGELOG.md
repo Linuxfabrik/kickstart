@@ -8,21 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-tbd
+
+## [v1.3.2] - 2026-08-05
+
+**Highlights:** Maintenance release. The kickstart files themselves are unchanged, so the `LF_KICKSTART_VERSION` build stamps stay untouched and installed hosts are unaffected. Nothing to do.
 
 
-## [1.3.2] - 2026-08-05
+## [v1.3.1] - 2026-06-29
 
-### Changed
-
-* **ci**: Bump the pinned GitHub Actions and the pre-commit tooling to their current releases
-* **ci**: Dependabot now proposes all GitHub Actions updates in a single pull request instead of one per action
-* **ci**: Dependency pull requests are merged more reliably, and pull requests touching a lockfile that is deliberately pinned to an older Python are left open for a human instead of being merged blindly
-
-No changes to the kickstart files themselves, so the `LF_KICKSTART_VERSION` build stamps stay untouched and installed hosts are unaffected.
-
-
-## [1.3.1] - 2026-06-29
+**Highlights:** One SSH key is removed from the `lfkeys` list in `lf-rhel.cfg`, so hosts installed from this version no longer trust it. Existing hosts keep the key and have to be cleaned up separately.
 
 ### Changed
 
@@ -32,12 +26,8 @@ No changes to the kickstart files themselves, so the `LF_KICKSTART_VERSION` buil
 
 * `lf-rhel.cfg`: Remove the SSH key for jihan.el-karz from the `lfkeys` list
 
-### Security
 
-* **ci**: Scope `GITHUB_TOKEN` permissions in the dependabot-auto-merge workflow to the job level, with top-level now `read-all`. Matches the pattern used by the other Linuxfabrik workflows and addresses the OpenSSF Scorecard `Token-Permissions` finding.
-
-
-## [1.3.0] - 2026-04-27
+## [v1.3.0] - 2026-04-27
 
 ### Added
 
@@ -49,7 +39,7 @@ No changes to the kickstart files themselves, so the `LF_KICKSTART_VERSION` buil
 * CONTRIBUTING: Switch `LF_KICKSTART_VERSION` from a repo-wide stamp to a per-file stamp. Only the cfg file whose effective content changes needs to be bumped; the three values may legitimately diverge over time. The previous repo-wide policy forced unrelated files to be touched on every commit, polluting `git blame` and `/root/lf-install-version` on Debian/Ubuntu hosts with builds that did not actually change anything for them
 
 
-## [1.2.2] - 2026-04-24
+## [v1.2.2] - 2026-04-24
 
 ### Added
 
@@ -61,7 +51,7 @@ No changes to the kickstart files themselves, so the `LF_KICKSTART_VERSION` buil
 * README: Cross-check the Feature, Tests and Install-Type sections for each of the three distros against the actual cfg-file behavior, and correct five discrepancies. The "What this ... does" summaries now mention the `LF_KICKSTART_VERSION` build stamp and the `/root/lf-install-version` fleet marker for all three distros. The RHEL `df -hT` test reflects the real mount counts (3 or 4 on non-CIS depending on BIOS/UEFI, 9 or 10 on CIS) instead of the previous off-by-one numbers. The RHEL `ll /root`/`grep` test no longer claims that the stamp lands in `/var/log/anaconda/anaconda.log` (it actually only lands in the `%post` `ks-script-*.log`). The `lftype` table now lists the `linuxfabrik` password as "locked (SSH key login via `cloud-init`)" for the cloud variants instead of the misleading "unset". A `//boot` typo in the Ubuntu section is fixed
 
 
-## [1.2.1] - 2026-04-15
+## [v1.2.1] - 2026-04-15
 
 ### Added
 
@@ -86,7 +76,7 @@ No changes to the kickstart files themselves, so the `LF_KICKSTART_VERSION` buil
 * `lf-rhel.cfg`: Drop the dead `rm -f /root/anaconda-ks.cfg` and `rm -f /root/original-ks.cfg` calls from the cloud post-install script. Both files are written by Anaconda's boss module (`_writeKS_via_boss` and `CopyLogsTask`) **after** all `%post` scripts have run, so the removals ran against non-existent files and had no effect. A comment at the same spot now documents the ordering so future maintainers do not reintroduce this
 
 
-## [1.2.0] - 2026-04-15
+## [v1.2.0] - 2026-04-15
 
 ### Added
 
@@ -102,14 +92,14 @@ No changes to the kickstart files themselves, so the `LF_KICKSTART_VERSION` buil
 * Harden the CI supply chain: the `pre-commit` install in the pre-commit-autoupdate workflow is now hash-pinned via `.github/pre-commit/requirements.txt` (generated with `pip-compile --generate-hashes --strip-extras`), and `dependabot/fetch-metadata` is pinned to a commit SHA so all GitHub Actions used in `.github/workflows/` are now pinned by hash. The policy is documented in CONTRIBUTING.md under "CI Supply Chain"
 
 
-## [1.1.1] - 2026-03-20
+## [v1.1.1] - 2026-03-20
 
 ### Fixed
 
 * Fix `cp` error preventing installs with Rocky 10 images
 
 
-## [1.1.0] - 2026-03-10
+## [v1.1.0] - 2026-03-10
 
 ### Added
 
@@ -158,11 +148,11 @@ No changes to the kickstart files themselves, so the `LF_KICKSTART_VERSION` buil
 
 
 [Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.2...HEAD
-[1.3.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.1...v1.3.2
-[1.3.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.0...v1.3.1
-[1.3.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.2...v1.3.0
-[1.2.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.1...v1.2.2
-[1.2.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.0...v1.2.1
-[1.2.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.1...v1.2.0
-[1.1.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.0...v1.1.1
-[1.1.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.0.0...v1.1.0
+[v1.3.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.1...v1.3.2
+[v1.3.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.0...v1.3.1
+[v1.3.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.2...v1.3.0
+[v1.2.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.1...v1.2.2
+[v1.2.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.0...v1.2.1
+[v1.2.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.1...v1.2.0
+[v1.1.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.1.0...v1.1.1
+[v1.1.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.0.0...v1.1.0
