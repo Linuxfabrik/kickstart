@@ -1,0 +1,40 @@
+name: 'Linuxfabrik: Pre-commit'
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request: {}
+
+permissions:
+  contents: 'read'
+
+jobs:
+  pre-commit:
+    name: 'Pre-commit'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Harden the runner (Audit all outbound calls)'
+        uses: 'step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c' # v2.21.0
+        with:
+          egress-policy: 'audit'
+
+      - name: 'Checkout repository'
+        uses: 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' # v7.0.1
+
+      # The repository carries no Python sources, so this interpreter only
+      # runs the hook framework itself.  Pinned explicitly so a runner image
+      # change cannot move it silently.
+      - name: 'Set up Python'
+        uses: 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97' # v7.0.0
+        with:
+          python-version: '3.13'
+
+      - name: 'Install pre-commit'
+        run: 'pip install --require-hashes --requirement .github/pre-commit/requirements.txt'
+
+      # --all-files, because the hooks otherwise only see what a commit
+      # happens to touch, and nothing guarantees a contributor ran
+      # `pre-commit install` at all.
+      - name: 'Run the hooks over the whole tree'
+        run: 'pre-commit run --all-files --show-diff-on-failure'
