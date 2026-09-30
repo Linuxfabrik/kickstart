@@ -160,9 +160,9 @@ During and after an Anaconda install, the following log files are the fastest pa
 
 **During the install (installer environment, switch to a shell with `Ctrl+Alt+F2` or `Ctrl+Alt+F3`):**
 
-* `/tmp/dynamic.ks`: The dynamically generated kickstart fragment that `%pre` produced. If Anaconda reports a kickstart syntax error in an included file, `cat` this file to see what was actually rendered.
+* `/tmp/dynamic.ks`: The dynamically generated kickstart fragment that `%pre` produced, including the `%post` sections that deploy the SSH keys and archive the fragments to `/root`. If Anaconda reports a kickstart syntax error in an included file, `cat` this file to see what was actually rendered.
 * `/tmp/kickstart.install.pre.log`: Output of the `%pre` script, including the `LF_KICKSTART_VERSION` stamp, the `lftype`/`lfdisk` detection, and the Python helper's progress messages. First place to look if the install aborts before the package selection.
-* `/tmp/ks-script-*.log`: Per-script output of each `%post` block and each post-script under `/usr/share/anaconda/post-scripts/`. Same files that will later be copied to `/var/log/anaconda/`.
+* `/tmp/ks-script-*.log`: Per-script output of each `%post` block. Same files that will later be copied to `/var/log/anaconda/`.
 * `/tmp/pre-script.py`: The Python helper itself. Useful if `%pre` crashes on a specific Python line.
 
 **After a successful install (on the installed system, under `/var/log/anaconda/`):**

@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* `lf-rhel.cfg`: A host installed from this release reports `2026093001` in `/root/lf-install-version`
+
+### Fixed
+
+* `lf-rhel.cfg`: Installs from a Rocky 10.2 ISO (and RHEL 10.2, Fedora 42+) deploy the Linuxfabrik SSH keys again and archive `dynamic.ks` and `70-install-ssh-keys.ks` in `/root`
+
 
 ## [v1.3.2] - 2026-08-05
 
