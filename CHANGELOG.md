@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [v1.3.3] - 2026-11-03
+
 ### Changed
 
 * `lf-rhel.cfg`: A host installed from this release reports `2026110301` in `/root/lf-install-version`
@@ -126,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * The SSH user warning is gone ([#8](https://github.com/Linuxfabrik/kickstart/issues/8))
 
 
-[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.2...HEAD
+[Unreleased]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.3...HEAD
+[v1.3.3]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/Linuxfabrik/kickstart/compare/v1.3.0...v1.3.1
 [v1.3.0]: https://github.com/Linuxfabrik/kickstart/compare/v1.2.2...v1.3.0
