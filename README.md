@@ -145,6 +145,7 @@ What to test within the VM:
 * `ssh linuxfabrik@vm`: Should work on non-cloud. On cloud, it depends on cloud-init.
 * `sudo su -`: Should work.
 * `cat /etc/shadow`: Should show that root's password is locked.
+* `sudo grub2-editenv list`: Should not list `menu_auto_hide`. On reboot, the GRUB menu shows up with a 5-second countdown.
 * `df -hT`: On `lftype=cloud` and `lftype=minimal`, four mounts on UEFI (`/`, `/backup`, `/boot`, `/boot/efi`) and three on BIOS (no `/boot/efi`). On `lftype=cis` and `lftype=cloud-cis`, ten mounts on UEFI (`/`, `/backup`, `/boot`, `/boot/efi`, `/home`, `/tmp`, `/var`, `/var/log`, `/var/log/audit`, `/var/tmp`) and nine on BIOS. Swap is not listed by `df`.
 * `lvs`: Should work.
 * `sudo dnf -y install nano`: Should work.

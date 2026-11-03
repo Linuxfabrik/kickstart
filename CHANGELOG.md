@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* `lf-rhel.cfg`: A host installed from this release reports `2026093001` in `/root/lf-install-version`
+* `lf-rhel.cfg`: A host installed from this release reports `2026110301` in `/root/lf-install-version`
+* `lf-rhel.cfg`: The GRUB menu is always shown (RHEL and Rocky 9 and 10 hid it)
 
 ### Fixed
 
