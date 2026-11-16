@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* `lf-rhel.cfg`: A host installed from this release reports `2026111601` in `/root/lf-install-version`
+* `lf-rhel.cfg`: `/tmp` is 2 GB instead of 1 GB on `lftype=cis` and `lftype=cloud-cis`
+
 
 ## [v1.3.3] - 2026-11-03
 
